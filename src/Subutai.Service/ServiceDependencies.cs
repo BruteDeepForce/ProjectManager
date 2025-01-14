@@ -12,7 +12,7 @@ namespace Subutai.Service
     {
         public static IServiceCollection AddServiceDependencies(this IServiceCollection services)
         {
-                services.AddSingleton<IProjectEntityRepository, ProjectEntityRepository>();
+                services.AddScoped<IProjectEntityRepository, ProjectEntityRepository>();
 
                 return services;
         }
