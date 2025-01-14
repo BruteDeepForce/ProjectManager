@@ -1,6 +1,7 @@
 using Subutai.Domain.Ports;
 using Subutai.Repository.SqlRepository.Contexts;
 using Subutai.Repository.SqlRepository.Repositories;
+using Subutai.Service;
 
 namespace Subutai.WebApi;
 
@@ -16,6 +17,7 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
+        builder.Services.AddServiceDependencies();
         builder.Services.AddScoped<ISubutaiContext, SubutaiContext>();
         builder.Services.AddScoped<IProjectEntityRepository, ProjectEntityRepository>();
 

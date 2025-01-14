@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Repositories/Subutai.Repository.SqlRepository/Subutai.Repository.SqlRepository.csproj" />
+    <ProjectReference Include="..\Subutai.Service\Subutai.Service.csproj" />
   </ItemGroup>
 
 </Project>
