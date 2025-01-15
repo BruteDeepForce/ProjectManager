@@ -5,6 +5,7 @@ using Subutai.Service;
 using Microsoft.EntityFrameworkCore;
 
 
+
 namespace Subutai.WebApi;
 
 public class Program
@@ -14,7 +15,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
+        builder.AddServiceDefaults();
+        
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();

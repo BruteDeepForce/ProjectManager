@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="../Repositories/Subutai.Repository.SqlRepository/Subutai.Repository.SqlRepository.csproj" />
     <ProjectReference Include="..\Subutai.Service\Subutai.Service.csproj" />
+    <ProjectReference Include="..\Subutai.Aspire.ServiceDefaults\Subutai.Aspire.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
