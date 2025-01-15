@@ -1,3 +1,9 @@
-var builder = DistributedApplication.CreateBuilder(args);
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = DistributedApplication.CreateBuilder(args);
 
-builder.Build().Run();
+        builder.Build().Run();
+    }
+}

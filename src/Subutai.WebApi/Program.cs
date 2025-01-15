@@ -19,9 +19,9 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
-        // PostgreSQL veritabanı bağlantısını yapılandırma
-        builder.Services.AddDbContext<SubutaiContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x=> x.MigrationsAssembly("Subutai.Repository.SqlRepository")));   
+        // // PostgreSQL veritabanı bağlantısını yapılandırma
+        // builder.Services.AddDbContext<SubutaiContext>(options =>
+        // options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x=> x.MigrationsAssembly("Subutai.Repository.SqlRepository")));   
 
         builder.Services.AddServiceDependencies();
         builder.Services.AddScoped<ISubutaiContext, SubutaiContext>();
