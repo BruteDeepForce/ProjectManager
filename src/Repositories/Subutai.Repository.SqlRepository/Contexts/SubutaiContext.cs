@@ -18,4 +18,5 @@ public class SubutaiContext : DbContext, ISubutaiContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
+
 }
