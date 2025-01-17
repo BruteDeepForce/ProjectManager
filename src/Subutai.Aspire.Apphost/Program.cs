@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Aspire;
 using Google.Protobuf.WellKnownTypes;
+using Swashbuckle.AspNetCore;
 
 
 internal class Program
@@ -12,24 +13,13 @@ internal class Program
     {
         var builder = DistributedApplication.CreateBuilder(args);
 
-        // var postgres = builder.AddPostgres("postgres"); 
-        // var postgresdb = postgres.AddDatabase("postgresdb");
+        var db = builder.AddPostgres("db").WithPgAdmin().WithDataVolume();
 
-        // builder.AddProject<Projects.Subutai_WebApi>("webapi").WithReference(postgresdb);
-
-        // var postgres = builder.AddPostgres("postgres")
-        //               .WithPgAdmin();
-
-        // var postgresdb = postgres.AddDatabase("postgresdb");
-
-        // var exampleProject = builder.AddProject<Projects.Subutai_WebApi>("webapi")
-        //                     .WithReference(postgresdb);
-
-        var db = builder.AddPostgres("db").WithPgAdmin();
-
-        var projectdb = db.AddDatabase("postgresdb");
+        var projectdb = db.AddDatabase("ProjectDb");
 
         builder.AddProject<Projects.Subutai_WebApi>("webapi").WithReference(projectdb);
+
+        // builder.AddProject<Projects.Subutai_WebApi>("webapi").WithSwaggerUI();
 
         builder.Build().Run();
     }

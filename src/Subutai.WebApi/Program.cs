@@ -26,8 +26,8 @@ public class Program
         //builder.Services.AddDbContext<SubutaiContext>(options =>
         //options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x=> x.MigrationsAssembly("Subutai.Repository.SqlRepository")));   
 
-        builder.AddNpgsqlDbContext<SubutaiContext>("postgresdb");
-        builder.Services.AddServiceDependencies();
+        builder.AddNpgsqlDbContext<SubutaiContext>("ProjectDb");
+        //builder.Services.AddServiceDependencies();
         builder.Services.AddScoped<ISubutaiContext, SubutaiContext>();
         builder.Services.AddScoped<IProjectEntityRepository, ProjectEntityRepository>();
 

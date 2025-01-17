@@ -110,7 +110,7 @@ public sealed class ProjectEntityRepositoryTests
             Id = existingEntity.Id,
             Name = "New Name",
             Reference = "new reference",
-            DateStarted = DateTimeOffset.UtcNow,         
+            DateStarted = DateTime.Now,         
         };
 
         // Act
@@ -126,7 +126,7 @@ public sealed class ProjectEntityRepositoryTests
         result.DateCompleted.Should().Be(updateEntity.DateCompleted);
         result.DateStarted.Should().Be(updateEntity.DateStarted);
         result.DepartmentId.Should().Be(updateEntity.DepartmentId);
-        result.UpdatedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+        result.UpdatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         }
     }
 
@@ -153,8 +153,8 @@ public sealed class ProjectEntityRepositoryTests
         var projectId = 1;
         var projectName = "Test Project";
         var projectDescription = "Test Description";
-        var projectUpdateTime = DateTimeOffset.UtcNow;
-        var projectCreatedTime = DateTimeOffset.UtcNow.AddDays(-1);
+        var projectUpdateTime = DateTime.Now;
+        var projectCreatedTime = DateTime.Now.AddDays(-1);
         var newEntity = new ProjectEntity()      
         {
             Id = projectId,
@@ -171,7 +171,7 @@ public sealed class ProjectEntityRepositoryTests
             Name = "Second project",
             Description = projectDescription,
             UpdatedAt = projectUpdateTime,
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = DateTime.Now
         };
 
         // Act

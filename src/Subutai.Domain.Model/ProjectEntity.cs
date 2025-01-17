@@ -9,11 +9,11 @@ public class ProjectEntity : IHasCreationTime, IHasModificationTime, IHasDeletio
     public string Description { get; set; } = string.Empty;
     public string Reference { get; set; } = string.Empty;
     public int? DepartmentId { get; set; }
-    public DateTimeOffset DateStarted { get; set; }
-    public DateTimeOffset? DateCompleted { get; set; }
-    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
-    public DateTimeOffset? UpdatedAt { get; set; }
-    public DateTimeOffset? DeletedAt { get; set; }
+    public DateTime DateStarted { get; set; }
+    public DateTime? DateCompleted { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? UpdatedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
     public DepartmentEntity? Department { get; set; }
 }
