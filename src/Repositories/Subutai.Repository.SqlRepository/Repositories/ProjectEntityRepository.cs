@@ -32,7 +32,7 @@ public class ProjectEntityRepository : IProjectEntityRepository
         singleEntity.Reference = entity.Reference;
         singleEntity.DateCompleted = entity.DateCompleted;
         singleEntity.DateStarted = entity.DateStarted;
-        singleEntity.UpdatedAt = DateTime.Now;
+        singleEntity.UpdatedAt = DateTime.UtcNow;
         singleEntity.DepartmentId = entity.DepartmentId;
         _context.Projects.Update(singleEntity);
         await _context.SaveChangesAsync();
@@ -47,7 +47,8 @@ public class ProjectEntityRepository : IProjectEntityRepository
         {
             throw new ArgumentException("Entity is not found");
         }
-        singleEntity.DeletedAt = DateTime.Now;
+        singleEntity.DeletedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
         return singleEntity;
     }
 }

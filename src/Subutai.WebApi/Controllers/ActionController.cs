@@ -26,6 +26,20 @@ namespace Subutai.WebApi.Controllers
             await _projectEntityRepository.AddAsync(project);
 
             return Ok();
-        }      
+        }  
+        [HttpPost("updateProject")]
+        public async Task<IActionResult> UpdateProject([FromBody] ProjectEntity project)
+        {
+            await _projectEntityRepository.UpdateAsync(project);
+
+            return Ok();
+        }    
+        [HttpPost("deleteProject")]
+        public async Task<IActionResult> DeleteProject([FromBody] ProjectEntity project)
+        {
+            await _projectEntityRepository.DeleteAsync(project);
+
+            return Ok();
+        }
     }
 }

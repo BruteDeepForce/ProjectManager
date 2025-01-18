@@ -126,7 +126,7 @@ public sealed class ProjectEntityRepositoryTests
         result.DateCompleted.Should().Be(updateEntity.DateCompleted);
         result.DateStarted.Should().Be(updateEntity.DateStarted);
         result.DepartmentId.Should().Be(updateEntity.DepartmentId);
-        result.UpdatedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        result.UpdatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
         }
     }
 
@@ -153,8 +153,8 @@ public sealed class ProjectEntityRepositoryTests
         var projectId = 1;
         var projectName = "Test Project";
         var projectDescription = "Test Description";
-        var projectUpdateTime = DateTime.Now;
-        var projectCreatedTime = DateTime.Now.AddDays(-1);
+        var projectUpdateTime = DateTime.UtcNow;
+        var projectCreatedTime = DateTime.UtcNow.AddDays(-1);
         var newEntity = new ProjectEntity()      
         {
             Id = projectId,
@@ -171,7 +171,7 @@ public sealed class ProjectEntityRepositoryTests
             Name = "Second project",
             Description = projectDescription,
             UpdatedAt = projectUpdateTime,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         // Act
@@ -231,7 +231,7 @@ public sealed class ProjectEntityRepositoryTests
         using(new AssertionScope())
         {
             result.Should().NotBeNull();
-            result.DeletedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+            result.DeletedAt.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         }
     }
     #endregion
