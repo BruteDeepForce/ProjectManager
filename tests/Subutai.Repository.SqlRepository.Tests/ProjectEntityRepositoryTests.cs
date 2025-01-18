@@ -203,7 +203,7 @@ public sealed class ProjectEntityRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act     
-        var act = async() => await _repository.DeleteAsync(deleteEntity);
+        var act = async() => await _repository.DeleteAsync(firstEntity.Id);
 
         // Assert
         using(new AssertionScope())
@@ -225,7 +225,7 @@ public sealed class ProjectEntityRepositoryTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _repository.DeleteAsync(firstEntity);
+        var result = await _repository.DeleteAsync(firstEntity.Id);
 
         // Assert
         using(new AssertionScope())
