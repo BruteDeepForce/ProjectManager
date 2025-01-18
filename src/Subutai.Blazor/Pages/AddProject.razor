@@ -1,0 +1,89 @@
+﻿@page "/addproject"
+@inject HttpClient Http
+@using Subutai.Domain.Model
+@using System.Net.Http.Json
+
+<h3 class="title">Add Project</h3>
+<style>
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 30vh; /* Tüm ekran yüksekliğinde ortalama için */
+    }
+    .title {
+        text-align: center;
+        margin-bottom: 20px;
+        background-color: #0372da;
+    }
+    .form-container EditForm {
+        width: 100%;
+        max-width: 400px; /* Form genişliğini sınırlayın */
+        padding: 20px;
+        background-color: #0372da; /* Hafif bir arka plan rengi */
+        border-radius: 8px; /* Köşeleri yuvarlat */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    }
+
+    .form-container .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-container label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-container button {
+        width: 100%;
+    }
+</style>
+
+<div class=" form-container"
+<EditForm Model="@newProject" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Project Name:</label>
+        <InputText id="name" class="form-control" @bind-Value="newProject.Name" />
+    </div>
+
+    <div class="form-group">
+    <label for="description">Project Description:</label> 
+    <InputText id="description" class="form-control" @bind-Value="newProject.Description" />
+</div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Add Project</button>
+    </div>
+</EditForm>
+</div>
+
+@code {
+    private ProjectEntity newProject = new ProjectEntity();
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("https://localhost:7108/api/action/addproject", newProject);
+            if (response.IsSuccessStatusCode)
+            {
+                // Handle success (e.g., show a success message or redirect)
+                Console.WriteLine("Project successfully added!");
+            }
+            else
+            {
+                // Handle failure (e.g., show an error message)
+                Console.WriteLine("Failed to add project.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any errors during the request
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}

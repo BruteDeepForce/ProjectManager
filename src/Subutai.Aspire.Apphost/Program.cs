@@ -17,9 +17,13 @@ internal class Program
 
         var projectdb = db.AddDatabase("ProjectDb");
 
-        builder.AddProject<Projects.Subutai_WebApi>("webapi").WithReference(projectdb);
+        var webapi = builder.AddProject<Projects.Subutai_WebApi>("webapi").WithReference(projectdb);
 
-        // builder.AddProject<Projects.Subutai_WebApi>("webapi").WithSwaggerUI();
+        // var webapi = builder.AddProject<Projects.Subutai_WebApi>("web");
+
+        builder.AddProject<Projects.Subutai_Blazor>("blazor").WithReference(webapi);
+
+     // builder.AddProject<Projects.Subutai_WebApi>("webapi").WithSwaggerUI();
 
         builder.Build().Run();
     }

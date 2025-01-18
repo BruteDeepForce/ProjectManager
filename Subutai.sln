@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Subutai.Aspire.ServiceDefau
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Subutai.WebApi", "src\Subutai.WebApi\Subutai.WebApi.csproj", "{4F20A2C9-0342-4ACE-9548-A25E3B72B414}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Subutai.Blazor", "src\Subutai.Blazor\Subutai.Blazor.csproj", "{777D0F3B-6187-43A8-A49B-283330E1CDD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{4F20A2C9-0342-4ACE-9548-A25E3B72B414}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F20A2C9-0342-4ACE-9548-A25E3B72B414}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F20A2C9-0342-4ACE-9548-A25E3B72B414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{777D0F3B-6187-43A8-A49B-283330E1CDD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{777D0F3B-6187-43A8-A49B-283330E1CDD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{777D0F3B-6187-43A8-A49B-283330E1CDD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{777D0F3B-6187-43A8-A49B-283330E1CDD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,5 +101,6 @@ Global
 		{99674264-42AD-4CD6-A5E5-8C8829438B7E} = {A86FC0E1-7544-4495-9A45-3D1E0A1BCD91}
 		{015F0626-F854-4DB4-99E4-1F27C1158192} = {A86FC0E1-7544-4495-9A45-3D1E0A1BCD91}
 		{4F20A2C9-0342-4ACE-9548-A25E3B72B414} = {A86FC0E1-7544-4495-9A45-3D1E0A1BCD91}
+		{777D0F3B-6187-43A8-A49B-283330E1CDD6} = {A86FC0E1-7544-4495-9A45-3D1E0A1BCD91}
 	EndGlobalSection
 EndGlobal

@@ -34,12 +34,19 @@ namespace Subutai.WebApi.Controllers
 
             return Ok();
         }    
-        [HttpPost("deleteProject")]
-        public async Task<IActionResult> DeleteProject([FromBody] ProjectEntity project)
+        [HttpPost("deleteproject/{id}")]
+        public async Task<IActionResult> DeleteProject(int id)
         {
-            await _projectEntityRepository.DeleteAsync(project);
+            await _projectEntityRepository.DeleteAsync(id);
 
             return Ok();
+        }
+        [HttpGet("getProjects")]
+        public async Task<IActionResult> GetProjects()
+        {
+            var projects = await _projectEntityRepository.GetAsync();
+
+            return Ok(projects);
         }
     }
 }

@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Routing
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Task Management System</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable">
+    <nav class="flex-column">
+        <!-- Projects Main Item -->
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="ToggleProjectsMenu">
+                <span class="oi oi-folder" aria-hidden="true"></span> Projects
+            </NavLink>
+        </div>
+
+        <!-- Submenu for Projects -->
+        @if (!collapseProjectsMenu)
+        {
+            <div class="ms-3">
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="projectlist">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Project List
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="addproject">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Add Project
+                    </NavLink>
+                </div>
+            </div>
+        }
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private bool collapseProjectsMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void ToggleProjectsMenu()
+    {
+        collapseProjectsMenu = !collapseProjectsMenu;
+    }
+}

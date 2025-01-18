@@ -39,9 +39,9 @@ public class ProjectEntityRepository : IProjectEntityRepository
 
         return singleEntity;
     }   
-    public async Task<ProjectEntity> DeleteAsync(ProjectEntity entity)
+    public async Task<ProjectEntity> DeleteAsync(int id)
     {
-        var singleEntity = await _context.Projects.FirstOrDefaultAsync(e => e.Id == entity.Id);
+        var singleEntity = await _context.Projects.FirstOrDefaultAsync(e => e.Id == id);
 
         if(singleEntity == null)
         {
@@ -50,5 +50,13 @@ public class ProjectEntityRepository : IProjectEntityRepository
         singleEntity.DeletedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return singleEntity;
+    }
+    public async Task<List<ProjectEntity>> GetAsync()
+    {
+        var projects =  await _context.Projects.ToListAsync();
+
+        var unDeletedProjects = projects.Where(e => e.DeletedAt == null).ToList();
+
+        return unDeletedProjects;
     }
 }

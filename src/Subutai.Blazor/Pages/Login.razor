@@ -1,0 +1,54 @@
+﻿@page "/"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using Subutai.Domain.Model
+@using Microsoft.AspNetCore.Components.Forms
+
+
+<h3>Login</h3>
+
+<EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <InputText id="Username" class="form-control" @bind="@loginModel.Username" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <InputPassword id="Password" class="form-control" @bind="@loginModel.Password" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+</EditForm>
+
+@code {
+    private UserEntity loginModel = new UserEntity();
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("https://localhost:7108/api/login/login", loginModel);
+            if (response.IsSuccessStatusCode)
+            {
+                // Başarı durumunda, örneğin kullanıcıyı dashboard'a yönlendirebilirsiniz
+                Navigation.NavigateTo("/projectlist");
+            }
+            else
+            {
+                // Hatalı giriş
+                Console.WriteLine("Invalid credentials");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Hata durumu
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+}
