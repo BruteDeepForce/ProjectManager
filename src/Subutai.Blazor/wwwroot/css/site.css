@@ -70,60 +70,45 @@ a, .btn-link {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 40vh;
+        min-height: 100vh;
         text-align: center;
+        background-color: #000000;
+        padding-top: 50px;
     }
     
     form {
         background-color: white;
-        padding: 1.5rem;
+        padding: 2.5rem;
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        width: 100%;
-        max-width: 300px;
+        width: 400%;
+        max-width: 2000px; /* Form genişliği artırıldı */
         color: #333;
     }
     
     form h1 {
         margin-bottom: 1rem;
         color: #0071c1;
-        font-size: 1.5rem;
-    }
-    
-    .form-group {
-        margin-bottom: 1rem;
-    }
-    
-    label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-        font-size: 0.9rem;
+        font-size: 1.8rem; /* Daha büyük başlık */
     }
     
     input, .form-control {
         width: 100%;
-        padding: 0.6rem;
+        padding: 0.8rem; /* Daha büyük input alanları */
         border: 1px solid #ccc;
         border-radius: 5px;
         box-sizing: border-box;
-        font-size: 0.9rem;
-    }
-    
-    input:focus, .form-control:focus {
-        border-color: #0071c1;
-        outline: none;
-        box-shadow: 0 0 5px rgba(0, 113, 193, 0.5);
+        font-size: 1rem; /* Font boyutunu artırdık */
     }
     
     button {
         width: 100%;
-        padding: 0.6rem;
+        padding: 0.8rem;
         background-color: #0071c1;
         border: none;
         border-radius: 5px;
         color: white;
-        font-size: 0.9rem;
+        font-size: 1rem; /* Daha büyük buton fontu */
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
@@ -131,3 +116,34 @@ a, .btn-link {
     button:hover {
         background-color: #005b9a;
     }
+    
+    .layout-container {
+        position: relative;
+        min-height: 100vh;
+        background-color: #000000; /* Sayfa arka plan rengi */
+    }
+    
+    .logo-container {
+        position: absolute;
+        top: 25px; /* Yukarıdan mesafe */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        text-align: center;
+    }
+    
+    .logo-container img {
+        max-width: 230px; /* Logonun genişliği */
+        height: auto; /* Oranı korur */
+        opacity: 0.8; /* Hafif şeffaf görünüm */
+    }
+    
+    .content-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding-top: 1rem; /* Form ile logonun boşluğu */
+        z-index: 2;
+    }
+    

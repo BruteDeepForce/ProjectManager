@@ -1,15 +1,14 @@
 ﻿@page "/"
+@layout LoginLayout
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using Subutai.Domain.Model
 @using Microsoft.AspNetCore.Components.Forms
 
-
 <div class="logincontainer">
     <EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-
         <div class="form-group">
             <label for="username">Username:</label>
             <InputText id="username" class="form-control" @bind-Value="loginModel.Username" placeholder="Enter your username" />

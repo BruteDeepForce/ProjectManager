@@ -10,6 +10,8 @@ public class SubutaiContext : DbContext, ISubutaiContext
     public DbSet<ProjectEntity> Projects { get; set; } = null!;
     public DbSet<DepartmentEntity> Departments { get; set; } = null!;
 
+    public DbSet<UserEntity> Users{ get; set; } = null!;
+
     public SubutaiContext(DbContextOptions<SubutaiContext> options) : base(options)
     {
     }
