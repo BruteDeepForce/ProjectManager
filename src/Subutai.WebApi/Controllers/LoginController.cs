@@ -25,8 +25,8 @@ namespace Subutai.WebApi.Controllers
         public async Task<IActionResult> Login([FromBody] UserEntity user)
         {
             var IsUserExist = await _userAuthentication.UserControlAsync(user);
-            if (IsUserExist) return Unauthorized();
-            return Ok();
+            if (IsUserExist) return Ok();
+            return Unauthorized();
         }
     }
 
