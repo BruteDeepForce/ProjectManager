@@ -31,6 +31,7 @@ public class Program
         builder.Services.AddScoped<ISubutaiContext, SubutaiContext>();
         builder.Services.AddScoped<IProjectEntityRepository, ProjectEntityRepository>();
         builder.Services.AddScoped<IUserEntityRepository, UserEntityRepository>();
+        builder.Services.AddScoped<IUserAuthentication, UserAuthentication>();
 
         var app = builder.Build();
 
