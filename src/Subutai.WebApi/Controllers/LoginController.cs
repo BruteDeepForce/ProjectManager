@@ -12,15 +12,18 @@ namespace Subutai.WebApi.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        List<UserEntity> users = new List<UserEntity>
+        List<UserEntity> users;
+        public LoginController()
         {
-            new UserEntity {Username = "admin", Password = "1234"}
+        users = new List<UserEntity>
+        {
+            new UserEntity {Username = "admin", Password = "1234", Id = 1, Email = "admin@gmail.com"}
         };
-
+     }
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserEntity user)
         {
-            var userEntity = users.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
+            var userEntity = users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
             if (userEntity == null)
             {
                 return Unauthorized();

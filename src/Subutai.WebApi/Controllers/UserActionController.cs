@@ -27,5 +27,10 @@ namespace Subutai.WebApi.Controllers
                 if (response != null) return Ok();
                 else return BadRequest();
         }
+        [HttpGet("getuser")]
+        public async Task<IActionResult> GetUser()
+        {         
+            return Ok(await _userEntityRepository.GetUsersAsync());
+        }
     }
 }
