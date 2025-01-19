@@ -11,7 +11,6 @@ namespace Subutai.Domain.Ports
         public Task<UserEntity> AddAsync (UserEntity userEntity);
         public Task<UserEntity> UpdateAsync (UserEntity userEntity);
         public Task<UserEntity> DeleteAsync (int id);
-
-        public Task<UserEntity> GetUsersAsync ();
+        public Task<List<UserEntity>> GetUsersAsync ();
     }
 }

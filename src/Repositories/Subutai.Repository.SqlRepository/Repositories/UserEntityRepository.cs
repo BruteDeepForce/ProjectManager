@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Subutai.Domain.Model;
 using Subutai.Domain.Ports;
 using Subutai.Repository.SqlRepository.Contexts;
@@ -33,9 +35,10 @@ namespace Subutai.Repository.SqlRepository.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<UserEntity> GetUsersAsync()
+        public async Task<List<UserEntity>> GetUsersAsync()
         {
-            throw new NotImplementedException();
+            var users = await _context.Users.ToListAsync();
+            return users;
         }
     }
 }
