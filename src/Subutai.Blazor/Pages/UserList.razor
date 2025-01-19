@@ -51,7 +51,7 @@ else
         if (confirmDelete)
         {
             var emptyContent = new StringContent("");
-            var response = await Http.PostAsync($"https://localhost:7108/api/action/deleteproject/{id}", emptyContent);
+            var response = await Http.PostAsync($"https://localhost:7108/api/useraction/deleteuser/{id}", emptyContent);
 
             if (response.IsSuccessStatusCode)
             {

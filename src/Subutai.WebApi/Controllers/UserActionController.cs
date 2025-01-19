@@ -32,5 +32,13 @@ namespace Subutai.WebApi.Controllers
         {         
             return Ok(await _userEntityRepository.GetUsersAsync());
         }
+        [HttpPost("deleteuser/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+
+            var response = await _userEntityRepository.DeleteAsync(id);
+            if (response != null) return Ok();
+            return BadRequest();
+        }
     }
 }

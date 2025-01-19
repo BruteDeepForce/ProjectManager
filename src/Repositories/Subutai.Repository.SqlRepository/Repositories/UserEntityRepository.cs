@@ -25,9 +25,18 @@ namespace Subutai.Repository.SqlRepository.Repositories
             return userEntity;
         }
 
-        public Task<UserEntity> DeleteAsync(int id)
+        public async Task<UserEntity> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(e=> e.Id == id);
+
+            if (user != null) 
+            {
+                user.DeletedAt = DateTime.UtcNow; 
+                await _context.SaveChangesAsync();
+                return user; 
+            }
+            throw new ArgumentException("Entity is not found");
+
         }
 
         public Task<UserEntity> UpdateAsync(UserEntity userEntity)
@@ -38,7 +47,8 @@ namespace Subutai.Repository.SqlRepository.Repositories
         public async Task<List<UserEntity>> GetUsersAsync()
         {
             var users = await _context.Users.ToListAsync();
-            return users;
+            var unDeletedUsers = users.Where(e=> e.DeletedAt == null).ToList();
+            return unDeletedUsers;
         }
     }
 }
