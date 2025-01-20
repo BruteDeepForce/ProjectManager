@@ -146,4 +146,16 @@ a, .btn-link {
         padding-top: 1rem; /* Form ile logonun boşluğu */
         z-index: 2;
     }
-    
+    /* Hata Mesajı */
+    .error-message {
+        background-color: #db3644;
+    color: #721c24;
+    padding: 10px 15px;
+    border: 1px solid #f5c6cb;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display:contents; 
+    text-align: center;
+}
