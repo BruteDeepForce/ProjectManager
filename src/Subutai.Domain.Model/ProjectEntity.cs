@@ -14,6 +14,5 @@ public class ProjectEntity : IHasCreationTime, IHasModificationTime, IHasDeletio
     public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
-
     public DepartmentEntity? Department { get; set; }
 }

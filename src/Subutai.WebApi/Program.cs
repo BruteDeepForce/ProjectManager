@@ -5,7 +5,9 @@ using Subutai.Service;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Aspire.Npgsql.EntityFrameworkCore.PostgreSQL;
- 
+using Subutai.Domain.Model;
+using Microsoft.AspNetCore.Identity;
+
 namespace Subutai.WebApi;
 
 public class Program
@@ -25,6 +27,18 @@ public class Program
         // // PostgreSQL Local veritabanı bağlantısını yapılandırma ayarları
         //builder.Services.AddDbContext<SubutaiContext>(options =>
         //options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x=> x.MigrationsAssembly("Subutai.Repository.SqlRepository")));   
+
+
+        
+        // builder.Services.AddDbContext<AuthenticationContext>(options =>                     // Add AuthenticationContext to the services container
+        // options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        // x => x.MigrationsAssembly("Subutai.Repository.SqlRepository")));
+
+        builder.AddNpgsqlDbContext<AuthenticationContext>("ProjectDb");
+        builder.Services.AddIdentity<AuthEntity, IdentityRole<Guid>>( options =>  // Add Identity to the services container
+        {
+
+        }).AddEntityFrameworkStores<AuthenticationContext>();
 
         builder.AddNpgsqlDbContext<SubutaiContext>("ProjectDb");
         //builder.Services.AddServiceDependencies();
