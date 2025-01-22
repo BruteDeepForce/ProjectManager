@@ -11,6 +11,7 @@ using Subutai.Domain.Model;
 using Subutai.Domain.Ports;
 using Subutai.Service;
 using Subutai.Service.GuidModel;
+using static Subutai.Service.AuthEntityControl;
 
 namespace Subutai.WebApi.Controllers
 {
@@ -19,25 +20,24 @@ namespace Subutai.WebApi.Controllers
     public class LoginController : ControllerBase
     {
         private readonly UserManager<AuthEntity> _userManager;
+        private readonly IAuthEntityControl _authEntityControl;
 
-        public LoginController(UserManager<AuthEntity> userManager)
+        public LoginController(UserManager<AuthEntity> userManager, IAuthEntityControl authEntityControl)
         {
             _userManager = userManager;
+            _authEntityControl = authEntityControl;
+
         }
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model, CancellationToken cancellationToken)
         {
             
-            if(!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var response = await _authEntityControl.LoginAsync(model);
 
-            var userEntity = await _userManager.FindByEmailAsync(model.Email);
-            if (userEntity == null || !await _userManager.CheckPasswordAsync(userEntity, model.Password))
-            {
-                return Unauthorized();
-            }
+            if (response == null) return BadRequest("Invalid email or password");
             return Ok();
-
         }
         [AllowAnonymous]
         [HttpPost("register")]
@@ -45,38 +45,22 @@ namespace Subutai.WebApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var userEntity = new AuthEntity
-            {
-                UserName = model.UserName,
-                Email = model.Email,
-                
-            };
-
-            var result = await _userManager.CreateAsync(userEntity, model.Password);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
+            var response = await _authEntityControl.RegisterAsync(model);
+            if (response == null) return BadRequest("User already exists");
             return Ok();
         }
+        [AllowAnonymous]
         [HttpPost("resetpass")]
-        public async Task<IActionResult> ResetPassword(reset reset)
+        public async Task<IActionResult> ResetPassword(ResetModel resetModel)
         {
 
-            var user = await _userManager.FindByEmailAsync(reset.mail);
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+            var response = await _authEntityControl.PasswordResetAsync(resetModel);
+            
+            return Ok();
 
-            if (user != null)
-            {
-                var generatedToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                await _userManager.ResetPasswordAsync(user, reset.password, generatedToken);
-                return Ok();
-
-            }
-            return BadRequest();
 
         }
-
-        public record reset (string mail, string password);
 
     }
 }

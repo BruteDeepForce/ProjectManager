@@ -7,6 +7,7 @@ using Subutai.Domain.Model;
 using Subutai.Domain.Ports;
 using Subutai.Repository.SqlRepository.Contexts;
 using Subutai.Repository.SqlRepository.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace Subutai.WebApi.Controllers
 {
