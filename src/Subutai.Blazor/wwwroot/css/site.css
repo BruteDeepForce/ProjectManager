@@ -159,3 +159,7 @@ a, .btn-link {
     display:contents; 
     text-align: center;
 }
+.button-spacing 
+{
+    margin-top: 10px;
+}

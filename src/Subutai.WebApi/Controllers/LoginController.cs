@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -18,15 +19,14 @@ namespace Subutai.WebApi.Controllers
     public class LoginController : ControllerBase
     {
         private readonly UserManager<AuthEntity> _userManager;
-        private readonly SignInManager<UserEntity> _signInManager;
-        public LoginController(UserManager<AuthEntity> userManager, SignInManager<UserEntity> signInManager)
+
+        public LoginController(UserManager<AuthEntity> userManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model, CancellationToken cancellationToken)
         {
             
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -39,8 +39,9 @@ namespace Subutai.WebApi.Controllers
             return Ok();
 
         }
+        [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -58,6 +59,24 @@ namespace Subutai.WebApi.Controllers
             }
             return Ok();
         }
+        [HttpPost("resetpass")]
+        public async Task<IActionResult> ResetPassword(reset reset)
+        {
+
+            var user = await _userManager.FindByEmailAsync(reset.mail);
+
+            if (user != null)
+            {
+                var generatedToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                await _userManager.ResetPasswordAsync(user, reset.password, generatedToken);
+                return Ok();
+
+            }
+            return BadRequest();
+
+        }
+
+        public record reset (string mail, string password);
 
     }
 }

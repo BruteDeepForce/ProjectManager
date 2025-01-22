@@ -37,6 +37,11 @@ public class Program
         builder.AddNpgsqlDbContext<AuthenticationContext>("ProjectDb");
         builder.Services.AddIdentity<AuthEntity, IdentityRole<Guid>>( options =>  // Add Identity to the services container
         {
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 2;
+            options.Password.RequireNonAlphanumeric = false;
 
         }).AddEntityFrameworkStores<AuthenticationContext>();
 

@@ -1,5 +1,5 @@
-﻿@page "/"
-@layout LoginLayout
+﻿@page "/register"
+@layout RegisterLayout
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using Subutai.Domain.Model
@@ -7,7 +7,7 @@
 @using Subutai.Service.GuidModel
 
 <div class="logincontainer">
-    <EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
+    <EditForm Model="@registerModel" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <!-- Hata mesajı bölümü -->
@@ -19,42 +19,45 @@
         }
         <div class="form-group">
             <label for="E-Mail">E-Mail:</label>
-            <InputText id="E-Mail" class="form-control" @bind-Value="loginModel.Email" placeholder="Enter your E-mail" />
+            <InputText id="E-Mail" class="form-control" @bind-Value="registerModel.Email" placeholder="Enter your E-mail" />
         </div>
-
+        <div class="form-group">
+            <label for="Username">Username:</label>
+            <InputText id="Username" class="form-control" @bind-Value="registerModel.UserName" placeholder="Enter your Username" />
+        </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <InputText type="password" id="password" class="form-control" @bind-Value="loginModel.Password" placeholder="Enter your password" />
+            <InputText type="password" id="password" class="form-control" @bind-Value="registerModel.Password" placeholder="Enter your password" />
         </div>
         <div>
 
         </div>
         <div class="form-group" style="margin-top: 10px;">
-         <button type="submit" class="btn btn-primary">Login</button>
+         <button type="submit" class="btn btn-primary">Cancel</button>
         </div>
-        <div class="form-group" style="margin-top: 10px;">
-            <button type="button" class="btn btn-secondary" @onclick="NavigateToRegister">Register</button>
+        <div class="form-group" style="margin-top: 10px;">        
+        <button type="submit" class="btn btn-primary">Apply</button>
         </div>
     </EditForm>
 </div>
 @code {
     public bool showErrorMessage = false;
-    private LoginModel loginModel = new LoginModel();
+    private RegisterModel registerModel = new RegisterModel();
 
     private async Task HandleValidSubmit()
     {
         try
         {
-            var response = await Http.PostAsJsonAsync("https://localhost:7108/api/login/login", loginModel);
+            var response = await Http.PostAsJsonAsync("https://localhost:7108/api/login/register", registerModel);
             if (response.IsSuccessStatusCode)
             {
                 // Başarı durumunda, örneğin kullanıcıyı dashboard'a yönlendirebilirsiniz
-                Navigation.NavigateTo("/projectlist");
+                Navigation.NavigateTo("/");
             }
             else
             {
                 // Hatalı giriş
-                showErrorMessage = true;
+               showErrorMessage = true;
                 Console.WriteLine("Invalid credentials");
                 ClearForm();
             }
@@ -66,16 +69,11 @@
             ClearForm();
         }
     }
-    private void NavigateToRegister()
-    {
-        Navigation.NavigateTo("/register");
-
-    }
     private void ClearForm()
 
     {
-        loginModel.Email = string.Empty;
-        loginModel.Password = string.Empty;
+        registerModel.Email = string.Empty;
+        registerModel.Password = string.Empty;
     }
 
 }

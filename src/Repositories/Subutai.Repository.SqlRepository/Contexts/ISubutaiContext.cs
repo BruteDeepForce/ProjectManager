@@ -7,7 +7,6 @@ public interface ISubutaiContext
 {
     DbSet<ProjectEntity> Projects { get; set; }
     DbSet<DepartmentEntity> Departments { get; set; }
-
     DbSet<UserEntity> Users{ get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     
