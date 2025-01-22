@@ -18,7 +18,7 @@ namespace Subutai.Service
         {
             _userManager = userManager;
         }
-        public async Task<AuthEntity> LoginAsync(LoginModel loginModel)
+        public async Task<string> LoginAsync(LoginModel loginModel)
         {
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
 
@@ -26,7 +26,8 @@ namespace Subutai.Service
             {
                 return null;
             }
-            return user;
+            var generatedToken = await _userManager.GenerateUserTokenAsync(user, "Default", "login");
+            return generatedToken;
         }
         public async Task<AuthEntity> PasswordResetAsync(ResetModel resetModel)
         {

@@ -8,6 +8,7 @@ using Subutai.Domain.Ports;
 using Subutai.Repository.SqlRepository.Contexts;
 using Subutai.Repository.SqlRepository.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Subutai.WebApi.Controllers
 {
@@ -42,6 +43,7 @@ namespace Subutai.WebApi.Controllers
 
             return Ok();
         }
+        [Authorize]
         [HttpGet("getProjects")]
         public async Task<IActionResult> GetProjects()
         {

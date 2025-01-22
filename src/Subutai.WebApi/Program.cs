@@ -43,7 +43,7 @@ public class Program
             options.Password.RequiredLength = 2;
             options.Password.RequireNonAlphanumeric = false;
 
-        }).AddEntityFrameworkStores<AuthenticationContext>();
+        }).AddEntityFrameworkStores<AuthenticationContext>().AddDefaultTokenProviders();
 
         builder.AddNpgsqlDbContext<SubutaiContext>("ProjectDb");
         //builder.Services.AddServiceDependencies();
