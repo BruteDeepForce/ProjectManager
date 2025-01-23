@@ -43,7 +43,7 @@ namespace Subutai.WebApi.Controllers
 
             return Ok();
         }
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("getProjects")]
         public async Task<IActionResult> GetProjects()
         {

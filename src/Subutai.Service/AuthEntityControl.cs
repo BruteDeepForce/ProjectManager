@@ -35,7 +35,7 @@ namespace Subutai.Service
             {
                 return null;
             }
-            var generatedToken = GenerateToken(loginModel.Email);
+            var generatedToken = await GenerateToken(loginModel.Email);
 
             return generatedToken;
         }
@@ -74,27 +74,32 @@ namespace Subutai.Service
         }
         
         public record ResetModel(string Email);
-        private string GenerateToken(string email)
+        private async Task<string> GenerateToken(string email)
         {
          var jwtSettings = _configuration.GetSection("Jwt");
          var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
 
-        //  var user = await _userManager.FindByEmailAsync(email);  //rol için standby şuan
+          var user = await _userManager.FindByEmailAsync(email);  //rol için standby şuan
+          var roles = await _userManager.GetRolesAsync(user);
 
-            // var claims = new[]
-            // {
-            //     new Claim(JwtRegisteredClaimNames.Sub, email),
-            //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            //     // new Claim("Role", userRole)  //Claimden Role bilgisini ekliyoruz
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                // new Claim("Role", userRole)  //Claimden Role bilgisini ekliyoruz
 
-            // };
+            };
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                  var token = new JwtSecurityToken(
                  issuer: jwtSettings["Issuer"],
                  audience: jwtSettings["Audience"],
                  expires: DateTime.UtcNow.AddSeconds(90),
-                 signingCredentials: credentials
+                 signingCredentials: credentials,
+                 claims : claims
+                 
             ); 
 
             return new JwtSecurityTokenHandler().WriteToken(token);
