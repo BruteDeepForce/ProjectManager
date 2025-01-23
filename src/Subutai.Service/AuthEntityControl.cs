@@ -7,16 +7,25 @@ using Subutai.Service.GuidModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
+using System.Text;
+using System.Security.Claims;
+using Microsoft.VisualBasic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Subutai.Service
 {
     public class AuthEntityControl : IAuthEntityControl
     {
         private readonly UserManager<AuthEntity> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public AuthEntityControl(UserManager<AuthEntity> userManager)
+        public AuthEntityControl(UserManager<AuthEntity> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
+            _configuration = configuration;
         }
         public async Task<string> LoginAsync(LoginModel loginModel)
         {
@@ -26,7 +35,8 @@ namespace Subutai.Service
             {
                 return null;
             }
-            var generatedToken = await _userManager.GenerateUserTokenAsync(user, "Default", "login");
+            var generatedToken = GenerateToken(loginModel.Email);
+
             return generatedToken;
         }
         public async Task<AuthEntity> PasswordResetAsync(ResetModel resetModel)
@@ -38,7 +48,7 @@ namespace Subutai.Service
                 return null;
             }
 
-            var generatedToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            string? generatedToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             var resetLink = $"https://localhost:5001/api/login/resetpassword?email={resetModel.Email}&token={generatedToken}";
 
@@ -56,9 +66,38 @@ namespace Subutai.Service
                 Email = registerModel.Email,
             }; 
             var result = await _userManager.CreateAsync(user, registerModel.Password);
-            if (!result.Succeeded) return null;
+
+            var res2 = await _userManager.AddToRoleAsync(user, registerModel.Role);
+
+            if (!result.Succeeded && !res2.Succeeded) return null;
             return user;          
         }
+        
         public record ResetModel(string Email);
+        private string GenerateToken(string email)
+        {
+         var jwtSettings = _configuration.GetSection("Jwt");
+         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+
+        //  var user = await _userManager.FindByEmailAsync(email);  //rol için standby şuan
+
+            // var claims = new[]
+            // {
+            //     new Claim(JwtRegisteredClaimNames.Sub, email),
+            //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            //     // new Claim("Role", userRole)  //Claimden Role bilgisini ekliyoruz
+
+            // };
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                 var token = new JwtSecurityToken(
+                 issuer: jwtSettings["Issuer"],
+                 audience: jwtSettings["Audience"],
+                 expires: DateTime.UtcNow.AddSeconds(90),
+                 signingCredentials: credentials
+            ); 
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }

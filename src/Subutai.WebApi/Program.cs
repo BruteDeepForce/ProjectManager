@@ -7,6 +7,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Aspire.Npgsql.EntityFrameworkCore.PostgreSQL;
 using Subutai.Domain.Model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens; // TokenValidationParameters ve SymmetricSecurityKey için
+using System.Text;    
 
 namespace Subutai.WebApi;
 
@@ -35,7 +38,7 @@ public class Program
         // x => x.MigrationsAssembly("Subutai.Repository.SqlRepository")));
 
         builder.AddNpgsqlDbContext<AuthenticationContext>("ProjectDb");
-        builder.Services.AddIdentity<AuthEntity, IdentityRole<Guid>>( options =>  // Add Identity to the services container
+        builder.Services.AddIdentity<AuthEntity, AppRoleEntity>( options =>  // Add Identity to the services container
         {
             options.Password.RequireUppercase = false;
             options.Password.RequireLowercase = false;
@@ -44,6 +47,30 @@ public class Program
             options.Password.RequireNonAlphanumeric = false;
 
         }).AddEntityFrameworkStores<AuthenticationContext>().AddDefaultTokenProviders();
+        
+        var jwtSettings = builder.Configuration.GetSection("Jwt");
+        var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+               options.TokenValidationParameters = new TokenValidationParameters
+          {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+             };
+        });
+
+        builder.Services.AddAuthorization();
 
         builder.AddNpgsqlDbContext<SubutaiContext>("ProjectDb");
         //builder.Services.AddServiceDependencies();
@@ -61,7 +88,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
+        app.UseAuthentication();
         app.UseAuthorization();
 
 

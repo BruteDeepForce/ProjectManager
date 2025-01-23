@@ -37,7 +37,7 @@ namespace Subutai.WebApi.Controllers
             var response = await _authEntityControl.LoginAsync(model);
 
             if (response == null) return BadRequest("Invalid email or password");
-            return Ok();
+            return Ok(response);
         }
         [AllowAnonymous]
         [HttpPost("register")]
@@ -46,21 +46,19 @@ namespace Subutai.WebApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var response = await _authEntityControl.RegisterAsync(model);
+            
             if (response == null) return BadRequest("User already exists");
+
             return Ok();
         }
         [AllowAnonymous]
         [HttpPost("resetpass")]
         public async Task<IActionResult> ResetPassword(ResetModel resetModel)
         {
-
             if(!ModelState.IsValid) return BadRequest(ModelState);
             var response = await _authEntityControl.PasswordResetAsync(resetModel);
             
             return Ok();
-
-
         }
-
     }
 }
