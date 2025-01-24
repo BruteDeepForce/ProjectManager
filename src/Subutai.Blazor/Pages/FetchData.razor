@@ -4,12 +4,14 @@
 @using Subutai.Domain.Model
 @using Subutai.WebApi;
 @using Subutai.Blazor.Data;
+@using Blazored.LocalStorage
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <h1>Projects List</h1>
 
 <p>Datas Were fetch from PostgresqlDB.</p>
 
-@if (forecasts == null)
+@if (projects == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -26,14 +28,14 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var project in projects)
             {
                 <tr>
-                    <td>@forecast.Id</td>
-                    <td>@forecast.Name</td>
-                    <td>@forecast.CreatedAt</td>
-                    <td>@forecast.Description</td>
-                    <td><button class="btn btn-danger" @onclick="() => DeleteProject(forecast.Id)">Delete</button></td>
+                    <td>@project.Id</td>
+                    <td>@project.Name</td>
+                    <td>@project.CreatedAt</td>
+                    <td>@project.Description</td>
+                    <td><button class="btn btn-danger" @onclick="() => DeleteProject(project.Id)">Delete</button></td>
                 </tr>
             }
         </tbody>
@@ -41,11 +43,30 @@ else
 }
 
 @code {
-    private List<ProjectEntity>? forecasts;
+    private List<ProjectEntity>? projects;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        forecasts = await Http.GetFromJsonAsync<List<ProjectEntity>>("https://localhost:7108/api/action/getprojects");
+        if(firstRender)
+        {
+        var token = await localStorage.GetItemAsync<string>("authToken");
+            if(token is not null)
+            {
+               Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+               
+               var response = await Http.GetAsync("https://localhost:7108/api/action/getprojects");
+
+                if(response is not null)
+               {
+                projects = await Http.GetFromJsonAsync<List<ProjectEntity>>("https://localhost:7108/api/action/getprojects");             
+               }
+               else
+               {
+                 Console.WriteLine("UnAuthorized User");
+               }
+            }
+        StateHasChanged();
+        }
     }
     private async Task DeleteProject(int id)
     {
@@ -68,5 +89,6 @@ else
         }
 
     }
+
 }
 

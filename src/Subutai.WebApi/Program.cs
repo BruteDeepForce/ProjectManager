@@ -9,7 +9,9 @@ using Subutai.Domain.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens; // TokenValidationParameters ve SymmetricSecurityKey için
-using System.Text;    
+using System.Text; 
+using Blazored.LocalStorage;
+
 
 namespace Subutai.WebApi;
 
@@ -18,7 +20,6 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
         // Add services to the container.
         builder.AddServiceDefaults();
 
@@ -26,6 +27,8 @@ public class Program
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+
+
 
         // // PostgreSQL Local veritabanı bağlantısını yapılandırma ayarları
         //builder.Services.AddDbContext<SubutaiContext>(options =>
@@ -49,7 +52,7 @@ public class Program
         }).AddEntityFrameworkStores<AuthenticationContext>().AddDefaultTokenProviders();
         
         var jwtSettings = builder.Configuration.GetSection("Jwt");
-        var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+        var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
         builder.Services.AddAuthentication(options =>
         {
@@ -66,7 +69,7 @@ public class Program
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
              };
         });
 
@@ -86,7 +89,7 @@ public class Program
         {
             app.MapOpenApi();
         }
-
+    
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();

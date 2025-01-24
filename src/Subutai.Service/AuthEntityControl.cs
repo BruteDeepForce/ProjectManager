@@ -21,44 +21,45 @@ namespace Subutai.Service
     {
         private readonly UserManager<AuthEntity> _userManager;
         private readonly IConfiguration _configuration;
-
-        public AuthEntityControl(UserManager<AuthEntity> userManager, IConfiguration configuration)
+        private readonly IServiceProvider _serviceProvider;
+        public AuthEntityControl(UserManager<AuthEntity> userManager, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
-        public async Task<string> LoginAsync(LoginModel loginModel)
+        public async Task<string> LoginAsync(LoginModel loginModel)  //yapılandırıldı
         {
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
-                return null;
+                return null!;
             }
             var generatedToken = await GenerateToken(loginModel.Email);
 
             return generatedToken;
         }
-        public async Task<AuthEntity> PasswordResetAsync(ResetModel resetModel)
+        public async Task<AuthEntity> PasswordResetAsync(ResetModel resetModel) //yapılandırılmadı
         {
             var user = await _userManager.FindByEmailAsync(resetModel.Email);
 
             if (user != null)
             {
-                return null;
+                return null!;
             }
 
-            string? generatedToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            string? generatedToken = await _userManager.GeneratePasswordResetTokenAsync(user!);
 
             var resetLink = $"https://localhost:5001/api/login/resetpassword?email={resetModel.Email}&token={generatedToken}";
 
             //mail burada gönderilecek. Maildeki link üzerinden generate new password sayfasına yönlendirilecek.
-            return user;
+            return user!;
 
         }
-        public async Task<AuthEntity> RegisterAsync(RegisterModel registerModel)
+        public async Task<AuthEntity> RegisterAsync(RegisterModel registerModel) //yapılandırıldı
         {
-            if(registerModel == null) return null;
+            if(registerModel == null) return null!;
 
             var user = new AuthEntity
             {
@@ -66,10 +67,10 @@ namespace Subutai.Service
                 Email = registerModel.Email,
             }; 
             var result = await _userManager.CreateAsync(user, registerModel.Password);
-
+            //await CreateRoles(_serviceProvider);
             var res2 = await _userManager.AddToRoleAsync(user, registerModel.Role);
 
-            if (!result.Succeeded && !res2.Succeeded) return null;
+            if (!result.Succeeded && !res2.Succeeded) return null!;
             return user;          
         }
         
@@ -77,17 +78,16 @@ namespace Subutai.Service
         private async Task<string> GenerateToken(string email)
         {
          var jwtSettings = _configuration.GetSection("Jwt");
-         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
 
           var user = await _userManager.FindByEmailAsync(email);  //rol için standby şuan
-          var roles = await _userManager.GetRolesAsync(user);
+          var roles = await _userManager.GetRolesAsync(user!);
 
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 // new Claim("Role", userRole)  //Claimden Role bilgisini ekliyoruz
-
             };
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
@@ -103,6 +103,24 @@ namespace Subutai.Service
             ); 
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task CreateRoles(IServiceProvider serviceProvider)  //gerektiğinde kullanılacak
+        {
+                using(var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRoleEntity>>())
+                {var roles = new List<AppRoleEntity>()
+                {
+                    new AppRoleEntity(){ Name ="ADMIN"},
+                    new AppRoleEntity(){ Name ="MANAGER"},
+                    new AppRoleEntity() { Name ="USER"}
+                };
+                    foreach (var role in roles)
+                    {
+                         await roleManager.CreateAsync(role);
+                     }
+                }
+                // roles.ForEach(role => role.Name = role)
+
         }
     }
 }

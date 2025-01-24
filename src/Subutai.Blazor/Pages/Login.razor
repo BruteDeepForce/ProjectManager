@@ -5,6 +5,8 @@
 @using Subutai.Domain.Model
 @using Microsoft.AspNetCore.Components.Forms
 @using Subutai.Service.GuidModel
+@using Blazored.LocalStorage
+@inject ILocalStorageService localStorage
 
 <div class="logincontainer">
     <EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
@@ -44,16 +46,26 @@
 @code {
     public bool showErrorMessage = false;
     private LoginModel loginModel = new LoginModel();
+    private LoginResponse responseModel = new LoginResponse();
 
     private async Task HandleValidSubmit()
     {
-        try
-        {
+       
             var response = await Http.PostAsJsonAsync("https://localhost:7108/api/login/login", loginModel);
+
             if (response.IsSuccessStatusCode)
             {
-                // Başarı durumunda, örneğin kullanıcıyı dashboard'a yönlendirebilirsiniz
-                Navigation.NavigateTo("/projectlist");
+                var result = await response.Content.ReadAsStringAsync();
+                var token = result;
+                if(token is not null)
+                {
+                    await localStorage.SetItemAsync("authToken", token);
+                    
+                    Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                    Navigation.NavigateTo("/projectlist");
+                }
+
             }
             else
             {
@@ -62,18 +74,12 @@
                 Console.WriteLine("Invalid credentials");
                 ClearForm();
             }
-        }
-        catch (Exception ex)
-        {
-            // Hata durumu
-            Console.WriteLine($"Error: {ex.Message}");
-            ClearForm();
-        }
+        
+
     }
     private void NavigateToRegister()
     {
         Navigation.NavigateTo("/register");
-
     }
     private void ClearForm()
 
