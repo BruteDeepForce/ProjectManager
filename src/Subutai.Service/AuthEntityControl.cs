@@ -64,7 +64,8 @@ namespace Subutai.Service
             var user = new AuthEntity
             {
                 UserName = registerModel.UserName,
-                Email = registerModel.Email,
+                Email = registerModel.Email
+                
             }; 
             var result = await _userManager.CreateAsync(user, registerModel.Password);
             //await CreateRoles(_serviceProvider);

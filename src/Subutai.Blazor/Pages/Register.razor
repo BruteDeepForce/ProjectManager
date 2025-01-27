@@ -35,6 +35,18 @@
                 </label>
             <InputText type="password" id="password" class="form-control" @bind-Value="registerModel.Password" placeholder="Enter your password" />
         </div>
+        <div class="form-group">
+            <label for="role">
+                <strong>Role:</strong>
+                </label>
+            <InputSelect id="role" class="form-control" @bind-Value="registerModel.Role">
+                <option value="">-- Select Role --</option>
+                @foreach (var role in roles)
+                {
+                    <option value="@role.Name">@role.Name</option>
+                }
+            </InputSelect>
+        </div>
         <div>
 
         </div>
@@ -49,6 +61,22 @@
 @code {
     public bool showErrorMessage = false;
     private RegisterModel registerModel = new RegisterModel();
+
+    private List<AppRoleEntity> roles = new List<AppRoleEntity>();
+
+    protected override async Task OnInitializedAsync() 
+    {
+        try
+        {
+            var response = await Http.GetFromJsonAsync<List<AppRoleEntity>>("https://localhost:7108/api/role/getroles");
+            if(response is not null) roles = response;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+    }
 
     private async Task HandleValidSubmit()
     {
