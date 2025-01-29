@@ -17,7 +17,7 @@ namespace Subutai.Repository.SqlRepository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -105,8 +105,14 @@ namespace Subutai.Repository.SqlRepository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<float?>("CompletedProjects")
+                        .HasColumnType("real");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<float?>("CurrentWorkload")
+                        .HasColumnType("real");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
@@ -114,8 +120,20 @@ namespace Subutai.Repository.SqlRepository.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
+                    b.Property<float?>("ExperienceYears")
+                        .HasColumnType("real");
+
                     b.Property<string>("Password")
                         .HasColumnType("text");
+
+                    b.Property<float?>("PerformanceRating")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("TaskEfficiency")
+                        .HasColumnType("real");
+
+                    b.Property<Guid?>("UniqueId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

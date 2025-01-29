@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+    <ItemGroup>
+    <ProjectReference Include="../Repositories/Subutai.Repository.SqlRepository/Subutai.Repository.SqlRepository.csproj" />
+    <ProjectReference Include="..\Subutai.Service\Subutai.Service.csproj" />
+    <ProjectReference Include="..\Subutai.Aspire.ServiceDefaults\Subutai.Aspire.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="4.0.1" />
+    <PackageReference Include="Microsoft.ML.AutoML" Version="0.22.1" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="4.0.1" />
+  </ItemGroup>
+
+</Project>
