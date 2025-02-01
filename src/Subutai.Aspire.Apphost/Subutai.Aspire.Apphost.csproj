@@ -21,4 +21,8 @@
     <ProjectReference Include="../Subutai.Blazor/Subutai.Blazor.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Repositories\Subutai.Repository.SqlRepository\Subutai.Repository.SqlRepository.csproj" />
+  </ItemGroup>
+
 </Project>

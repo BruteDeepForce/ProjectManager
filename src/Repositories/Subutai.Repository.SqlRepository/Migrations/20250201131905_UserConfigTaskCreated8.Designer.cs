@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Subutai.Repository.SqlRepository.Contexts;
@@ -11,9 +12,11 @@ using Subutai.Repository.SqlRepository.Contexts;
 namespace Subutai.Repository.SqlRepository.Migrations
 {
     [DbContext(typeof(SubutaiContext))]
-    partial class SubutaiContextModelSnapshot : ModelSnapshot
+    [Migration("20250201131905_UserConfigTaskCreated8")]
+    partial class UserConfigTaskCreated8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,25 +195,6 @@ namespace Subutai.Repository.SqlRepository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.UserTaskMapping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserTaskMappings");
                 });
 
             modelBuilder.Entity("Subutai.Domain.Model.ProjectEntity", b =>

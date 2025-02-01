@@ -21,6 +21,8 @@
     <ProjectReference Include="..\Subutai.Service\Subutai.Service.csproj" />
     <ProjectReference Include="..\Subutai.Aspire.ServiceDefaults\Subutai.Aspire.ServiceDefaults.csproj" />
     <ProjectReference Include="..\MachineLearning\MachineLearning.csproj" />
+    <ProjectReference Include="../Users/suleymantuysuzoglu/ProjectManager/src/Repositories/Subutai.Repository.SqlRepository/Repositories/TaskEntityRepository.cs" />
+
   </ItemGroup>
 
 </Project>

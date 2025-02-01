@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Subutai.Domain.Model.Auditing;
 
+
 namespace Subutai.Domain.Model
 {
     public class UserEntity : IHasCreationTime, IHasDeletionTime, IHasModificationTime
@@ -21,5 +22,9 @@ namespace Subutai.Domain.Model
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? DeletedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public List<TaskEntity> TaskEntity {get;set;} = new();
+        public int? TaskId { get; set; }
+        public DateTime? CompleteTaskTime { get; set; }
+        public DateTime? ExpectTaskComplete { get; set; }
     }
 }

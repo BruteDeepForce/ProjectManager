@@ -39,6 +39,11 @@ public class Program
         // builder.Services.AddDbContext<AuthenticationContext>(options =>                     // Add AuthenticationContext to the services container
         // options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
         // x => x.MigrationsAssembly("Subutai.Repository.SqlRepository")));
+        builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        });
 
         builder.AddNpgsqlDbContext<AuthenticationContext>("ProjectDb");
         builder.Services.AddIdentity<AuthEntity, AppRoleEntity>( options =>  // Add Identity to the services container
@@ -81,6 +86,7 @@ public class Program
         builder.Services.AddScoped<IProjectEntityRepository, ProjectEntityRepository>();
         builder.Services.AddScoped<IUserEntityRepository, UserEntityRepository>();
         builder.Services.AddScoped<IAuthEntityControl, AuthEntityControl>();
+        builder.Services.AddScoped<ITaskEntityRepository, TaskEntityRepository>();
 
         var app = builder.Build();
 
