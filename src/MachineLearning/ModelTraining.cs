@@ -17,9 +17,7 @@ public static class ModelTraining
             var employeeData = subutaiContext.Users
                 .Select(e => new EmployeeData
                 {
-                    ExperienceYears = e.ExperienceYears.HasValue ? e.ExperienceYears.Value : 0.0f,
                     CompletedProjects = e.CompletedProjects.HasValue ? e.CompletedProjects.Value : 0,
-                    TaskEfficiency = e.TaskEfficiency.HasValue ? e.TaskEfficiency.Value : 0.0f,
                     CurrentWorkload = e.CurrentWorkload.HasValue ? e.CurrentWorkload.Value : 0.0f,
                     PerformanceRating = e.PerformanceRating.HasValue ? e.PerformanceRating.Value : 0.0f
                 }).ToList();
@@ -28,9 +26,8 @@ public static class ModelTraining
             IDataView trainingData = mlContext.Data.LoadFromEnumerable(employeeData);
 
             // Pipeline oluştur (Özellikleri birleştir + Modeli seç)
-            var pipeline = mlContext.Transforms.Concatenate("Features", "ExperienceYears", "CompletedProjects", "TaskEfficiency", "CurrentWorkload")
+            var pipeline = mlContext.Transforms.Concatenate("Features", "ExperienceYears", "CompletedProjects", "CurrentWorkload")
                 .Append(mlContext.Regression.Trainers.Sdca());
-
 
             // Modeli eğit
             Console.WriteLine("Model eğitiliyor...");
