@@ -17,10 +17,13 @@ namespace Subutai.Repository.SqlRepository.Repositories
         private readonly SubutaiContext _subutaiContext;
         private readonly UserManager<UserEntity> _userManager;
 
-        public UserTaskFeedbackRepository(SubutaiContext subutaiContext, UserManager<UserEntity> userManager)
+        private readonly AuthenticationContext _authenticationContext;
+
+        public UserTaskFeedbackRepository(SubutaiContext subutaiContext, UserManager<UserEntity> userManager, AuthenticationContext authenticationContext)
         {
          _subutaiContext = subutaiContext;   
          _userManager = userManager;
+         _authenticationContext = authenticationContext;    
         }
         public async Task<TaskResultDTO> CompleteTask(UserTaskDTO userTaskDTO)
         {
@@ -32,6 +35,7 @@ namespace Subutai.Repository.SqlRepository.Repositories
                 {
                 user.CompletedProjects++;
                 user.CurrentWorkload--;
+                await _authenticationContext.SaveChangesAsync();
 
                 taskEntity.DateCompleted = DateTime.UtcNow;
                 taskEntity.DeletedAt = DateTime.UtcNow;
