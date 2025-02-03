@@ -34,7 +34,7 @@ namespace Subutai.Repository.SqlRepository.Repositories
                          Name = userTaskDto.TaskName,
                          CreatedAt = DateTime.UtcNow,
                          RedLineTime = userTaskDto.RedLineTime,
-                         ExpectDateComplete = DateTime.UtcNow.AddDays(userTaskDto.RedLineTime ?? 0)
+                         ExpectDateComplete = DateTime.UtcNow.AddDays(userTaskDto.RedLineTime ?? 0) //null olmayacak.
                     };
                     await _subutaicontext.Tasks.AddAsync(taskEntity);
                     await _subutaicontext.SaveChangesAsync();
@@ -46,7 +46,8 @@ namespace Subutai.Repository.SqlRepository.Repositories
                     await _subutaicontext.UserTaskMappings.AddAsync(userMapping);
                     await _subutaicontext.SaveChangesAsync();
 
-                     user.ExpectTaskComplete = taskEntity.ExpectDateComplete;
+                    user.ExpectTaskComplete = taskEntity.ExpectDateComplete;
+                    user.CurrentWorkload++;
                     _subutaicontext.Users.Update(user);
                     await _subutaicontext.SaveChangesAsync();
 

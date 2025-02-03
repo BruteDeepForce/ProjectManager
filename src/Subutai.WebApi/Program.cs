@@ -87,6 +87,7 @@ public class Program
         builder.Services.AddScoped<IUserEntityRepository, UserEntityRepository>();
         builder.Services.AddScoped<IAuthEntityControl, AuthEntityControl>();
         builder.Services.AddScoped<ITaskEntityRepository, TaskEntityRepository>();
+        builder.Services.AddScoped<IUserTaskFeedbackRepository, UserTaskFeedbackRepository>();
 
         var app = builder.Build();
 

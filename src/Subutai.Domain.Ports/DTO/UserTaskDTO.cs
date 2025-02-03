@@ -9,9 +9,8 @@ namespace Subutai.Domain.Ports.DTO
     {
         public int UserId { get; set; }
         public string TaskName { get; set; } = string.Empty;
-        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
-        public int? RedLineTime { get; set;}
-        public DateTime? ExpectDateComplete { get; set; }
 
+        public int TaskId { get; set; } = 0;
+        public int? RedLineTime { get; set;}
     }
 }
