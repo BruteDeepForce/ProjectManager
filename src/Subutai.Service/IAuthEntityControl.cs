@@ -11,7 +11,7 @@ namespace Subutai.Service
     public interface IAuthEntityControl
     {
         Task<string> LoginAsync(LoginModel loginModel);  
-        Task<AuthEntity> RegisterAsync(RegisterModel registerModel);
-        Task<AuthEntity> PasswordResetAsync(ResetModel resetModel);
+        Task<UserEntity> RegisterAsync(RegisterModel registerModel);
+        Task<UserEntity> PasswordResetAsync(ResetModel resetModel);
     }
 }

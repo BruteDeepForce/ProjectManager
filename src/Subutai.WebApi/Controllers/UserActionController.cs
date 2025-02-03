@@ -23,21 +23,21 @@ namespace Subutai.WebApi.Controllers
         public async Task<IActionResult> addUser([FromBody] UserEntity entity)
         {
 
-                var response = await _userEntityRepository.AddAsync(entity);
-                if (response != null) return Ok();
-                else return BadRequest();
+                // var response = await _userEntityRepository.AddAsync(entity);
+                // if (response != null) return Ok();
+                return BadRequest();
         }
         [HttpGet("getusers")]
         public async Task<IActionResult> GetUser()
         {         
-            return Ok(await _userEntityRepository.GetUsersAsync());
+            return Ok();
         }
         [HttpPost("deleteuser/{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
 
-            var response = await _userEntityRepository.DeleteAsync(id);
-            if (response != null) return Ok();
+            // var response = await _userEntityRepository.DeleteAsync(id);
+            // if (response != null) return Ok();
             return BadRequest();
         }
     }

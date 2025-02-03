@@ -12,6 +12,5 @@ namespace Subutai.Domain.Model
         public string LastName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public ProjectEntity? Project { get; set; }
-
     }
 }

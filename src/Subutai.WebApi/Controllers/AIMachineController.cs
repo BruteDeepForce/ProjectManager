@@ -31,13 +31,13 @@ namespace Subutai.WebApi.Controllers
         [HttpGet("predict")]
         public async Task<IActionResult> Predict(UserEntity userEntity)
         {
-            var user =_subutaiContext.Users.FirstOrDefault(x=>x.Id == userEntity.Id);
+            // var user =_subutaiContext.Users.FirstOrDefault(x=>x.Id == userEntity.Id);
 
-            var response = MLModelPredictor.PredictPerformance(_subutaiContext);
+            // var response = MLModelPredictor.PredictPerformance(_subutaiContext);
 
-            user!.PerformanceRating = response;
-            await _subutaiContext.SaveChangesAsync();
-            return Ok(response);
+            // user!.PerformanceRating = response;
+            // await _subutaiContext.SaveChangesAsync();
+            return Ok();
 
         }
 

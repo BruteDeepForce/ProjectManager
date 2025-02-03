@@ -8,9 +8,9 @@ namespace Subutai.Domain.Ports
 {
     public interface IUserEntityRepository
     {
-        public Task<UserEntity> AddAsync (UserEntity userEntity);
-        public Task<UserEntity> UpdateAsync (UserEntity userEntity);
-        public Task<UserEntity> DeleteAsync (int id);
-        public Task<List<UserEntity>> GetUsersAsync ();
+        // public Task<UserEntity> AddAsync (UserEntity userEntity);
+        // public Task<UserEntity> UpdateAsync (UserEntity userEntity);
+        // public Task<UserEntity> DeleteAsync (Guid id);
+        // public Task<List<UserEntity>> GetUsersAsync ();
     }
 }

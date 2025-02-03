@@ -19,10 +19,10 @@ namespace Subutai.Service
 {
     public class AuthEntityControl : IAuthEntityControl
     {
-        private readonly UserManager<AuthEntity> _userManager;
+        private readonly UserManager<UserEntity> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
-        public AuthEntityControl(UserManager<AuthEntity> userManager, IConfiguration configuration, IServiceProvider serviceProvider)
+        public AuthEntityControl(UserManager<UserEntity> userManager, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -40,7 +40,7 @@ namespace Subutai.Service
 
             return generatedToken;
         }
-        public async Task<AuthEntity> PasswordResetAsync(ResetModel resetModel) //yapılandırılmadı
+        public async Task<UserEntity> PasswordResetAsync(ResetModel resetModel) //yapılandırılmadı
         {
             var user = await _userManager.FindByEmailAsync(resetModel.Email);
 
@@ -57,11 +57,11 @@ namespace Subutai.Service
             return user!;
 
         }
-        public async Task<AuthEntity> RegisterAsync(RegisterModel registerModel) //yapılandırıldı
+        public async Task<UserEntity> RegisterAsync(RegisterModel registerModel) //yapılandırıldı
         {
             if(registerModel == null) return null!;
 
-            var user = new AuthEntity
+            var user = new UserEntity
             {
                 UserName = registerModel.UserName,
                 Email = registerModel.Email
@@ -69,9 +69,9 @@ namespace Subutai.Service
             }; 
             var result = await _userManager.CreateAsync(user, registerModel.Password);
             //await CreateRoles(_serviceProvider);
-            var res2 = await _userManager.AddToRoleAsync(user, registerModel.Role);
+            //var res2 = await _userManager.AddToRoleAsync(user, registerModel.Role);
 
-            if (!result.Succeeded && !res2.Succeeded) return null!;
+            if (!result.Succeeded) return null!;
             return user;          
         }
         

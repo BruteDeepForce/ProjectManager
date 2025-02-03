@@ -152,7 +152,7 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Subutai.Domain.Model.AuthEntity", b =>
+            modelBuilder.Entity("Subutai.Domain.Model.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -161,11 +161,23 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime?>("CompleteTaskTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<float?>("CompletedProjects")
+                        .HasColumnType("real");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<float?>("CurrentWorkload")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -175,13 +187,11 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime?>("ExpectTaskComplete")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<float?>("ExperienceYears")
+                        .HasColumnType("real");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -197,8 +207,14 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
+
+                    b.Property<float?>("PerformanceRating")
+                        .HasColumnType("real");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
@@ -206,14 +222,14 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -228,84 +244,7 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.DepartmentEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DepartmentEntity");
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.ProjectEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("DateCompleted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("DateStarted")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Reference")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("ProjectEntity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -319,7 +258,7 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Subutai.Domain.Model.AuthEntity", null)
+                    b.HasOne("Subutai.Domain.Model.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -328,7 +267,7 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Subutai.Domain.Model.AuthEntity", null)
+                    b.HasOne("Subutai.Domain.Model.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -343,7 +282,7 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Subutai.Domain.Model.AuthEntity", null)
+                    b.HasOne("Subutai.Domain.Model.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -352,29 +291,11 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Subutai.Domain.Model.AuthEntity", null)
+                    b.HasOne("Subutai.Domain.Model.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.AuthEntity", b =>
-                {
-                    b.HasOne("Subutai.Domain.Model.ProjectEntity", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.ProjectEntity", b =>
-                {
-                    b.HasOne("Subutai.Domain.Model.DepartmentEntity", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("Department");
                 });
 #pragma warning restore 612, 618
         }

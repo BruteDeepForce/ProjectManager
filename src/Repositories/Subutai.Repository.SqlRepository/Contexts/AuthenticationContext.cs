@@ -9,9 +9,9 @@ using Subutai.Domain.Model;
 
 namespace Subutai.Repository.SqlRepository.Contexts
 {
-    public class AuthenticationContext : IdentityDbContext<AuthEntity, AppRoleEntity, Guid>
+    public class AuthenticationContext : IdentityDbContext<UserEntity, AppRoleEntity, Guid>
     {
-        public DbSet<AuthEntity> AuthEntities { get; set; }
+        public DbSet<UserEntity> UserAuthEntities { get; set; }
         public AuthenticationContext(DbContextOptions options) : base(options)
         {
         }

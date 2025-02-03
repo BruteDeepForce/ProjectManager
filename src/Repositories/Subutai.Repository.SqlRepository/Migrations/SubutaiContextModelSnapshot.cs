@@ -121,77 +121,15 @@ namespace Subutai.Repository.SqlRepository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("RedLineTime")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("UserNumber")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserNumber");
 
                     b.ToTable("Tasks");
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.UserEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CompleteTaskTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<float?>("CompletedProjects")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<float?>("CurrentWorkload")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("ExpectTaskComplete")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<float?>("ExperienceYears")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<float?>("PerformanceRating")
-                        .HasColumnType("real");
-
-                    b.Property<int?>("TaskId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Subutai.Domain.Model.UserTaskMapping", b =>
@@ -205,8 +143,8 @@ namespace Subutai.Repository.SqlRepository.Migrations
                     b.Property<int>("TaskId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -220,27 +158,6 @@ namespace Subutai.Repository.SqlRepository.Migrations
                         .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.TaskEntity", b =>
-                {
-                    b.HasOne("Subutai.Domain.Model.ProjectEntity", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("Subutai.Domain.Model.UserEntity", "User")
-                        .WithMany("TaskEntity")
-                        .HasForeignKey("UserNumber")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Subutai.Domain.Model.UserEntity", b =>
-                {
-                    b.Navigation("TaskEntity");
                 });
 #pragma warning restore 612, 618
         }

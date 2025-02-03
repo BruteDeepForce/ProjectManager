@@ -18,37 +18,37 @@ namespace Subutai.Repository.SqlRepository.Repositories
         {
                 _context = context;
         }
-        public async Task<UserEntity> AddAsync(UserEntity userEntity)
-        {
-            await _context.Users.AddAsync(userEntity);
-            await _context.SaveChangesAsync();
-            return userEntity;
-        }
+        // public async Task<UserEntity> AddAsync(UserEntity userEntity)
+        // {
+        //     await _context.Users.AddAsync(userEntity);
+        //     await _context.SaveChangesAsync();
+        //     return userEntity;
+        // }
 
-        public async Task<UserEntity> DeleteAsync(int id)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(e=> e.Id == id);
+        // public async Task<UserEntity> DeleteAsync(Guid id)
+        // {
+        //     var user = await _context.Users.FirstOrDefaultAsync(e=> e.Id == id);
 
-            if (user != null) 
-            {
-                user.DeletedAt = DateTime.UtcNow; 
-                await _context.SaveChangesAsync();
-                return user; 
-            }
-            throw new ArgumentException("Entity is not found");
+        //     if (user != null) 
+        //     {
+        //         user.DeletedAt = DateTime.UtcNow; 
+        //         await _context.SaveChangesAsync();
+        //         return user; 
+        //     }
+        //     throw new ArgumentException("Entity is not found");
 
-        }
+        // }
 
         public Task<UserEntity> UpdateAsync(UserEntity userEntity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<UserEntity>> GetUsersAsync()
-        {
-            var users = await _context.Users.ToListAsync();
-            var unDeletedUsers = users.Where(e=> e.DeletedAt == null).ToList();
-            return unDeletedUsers;
-        }
+        // public async Task<List<UserEntity>> GetUsersAsync()
+        // {
+        //     var users = await _context.Users.ToListAsync();
+        //     var unDeletedUsers = users.Where(e=> e.DeletedAt == null).ToList();
+        //     return unDeletedUsers;
+        // }
     }
 }

@@ -71,7 +71,7 @@ namespace Subutai.WebApi.Controllers
             return BadRequest();
         }
         [HttpGet("gettask")]
-        public async Task<IActionResult> GetTask(int id)
+        public async Task<IActionResult> GetTask(Guid id)
         {
                 var response = await _taskEntityRepository.GetTaskAsync(id);
 

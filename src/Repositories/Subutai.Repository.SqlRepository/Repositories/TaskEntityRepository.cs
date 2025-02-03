@@ -11,6 +11,7 @@ using Subutai.Repository.SqlRepository.Contexts;
 using Subutai.Repository.SqlRepository;
 using Subutai.Domain.Ports.DTO;
 using System.IO.Compression;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace Subutai.Repository.SqlRepository.Repositories
@@ -18,14 +19,19 @@ namespace Subutai.Repository.SqlRepository.Repositories
     public class TaskEntityRepository : ITaskEntityRepository
     {
         private readonly SubutaiContext _subutaicontext;
+        private readonly UserManager<UserEntity> _userManager;
+        private readonly AuthenticationContext _authenticationContext;
 
-        public TaskEntityRepository(SubutaiContext subutaiContext)
+        public TaskEntityRepository(SubutaiContext subutaiContext, UserManager<UserEntity> userManager, AuthenticationContext authenticationContext)
         {
             _subutaicontext = subutaiContext;
+            _userManager = userManager;
+            _authenticationContext = authenticationContext;
         }
         public async Task<TaskEntity> AddTaskAsync(UserTaskDTO userTaskDto)  //öncelik test edilecek
         {
-            var  user = await _subutaicontext.Users.FirstOrDefaultAsync(x => x.Id == userTaskDto.UserId);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userTaskDto.UserId);
+            var user2 = await _authenticationContext.Users.FirstOrDefaultAsync(x => x.Id == userTaskDto.UserId);
             
             if (user !=null) 
             {                
@@ -35,7 +41,7 @@ namespace Subutai.Repository.SqlRepository.Repositories
                          CreatedAt = DateTime.UtcNow,
                          RedLineTime = userTaskDto.RedLineTime,
                          ExpectDateComplete = DateTime.UtcNow.AddDays(userTaskDto.RedLineTime ?? 0) //null olmayacak.
-                    };
+                    };    
                     await _subutaicontext.Tasks.AddAsync(taskEntity);
                     await _subutaicontext.SaveChangesAsync();
 
@@ -48,7 +54,10 @@ namespace Subutai.Repository.SqlRepository.Repositories
 
                     user.ExpectTaskComplete = taskEntity.ExpectDateComplete;
                     user.CurrentWorkload++;
-                    _subutaicontext.Users.Update(user);
+                    
+                    await _userManager.UpdateAsync(user);
+                    _authenticationContext.Users.Update(user);
+                    await _authenticationContext.SaveChangesAsync();
                     await _subutaicontext.SaveChangesAsync();
 
                     return taskEntity;
@@ -60,7 +69,7 @@ namespace Subutai.Repository.SqlRepository.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<TaskEntity>> GetTaskAsync(int id)
+        public async Task<List<TaskEntity>> GetTaskAsync(Guid id)
         {
             var UserTaskMap = _subutaicontext.UserTaskMappings.Where(x=>x.UserId == id).ToList();
             var tasks = new List<TaskEntity>();

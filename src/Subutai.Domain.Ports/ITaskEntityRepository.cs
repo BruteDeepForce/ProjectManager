@@ -11,7 +11,7 @@ namespace Subutai.Domain.Ports
 {
     public interface ITaskEntityRepository
     {
-        public Task<List<TaskEntity>> GetTaskAsync(int id);
+        public Task<List<TaskEntity>> GetTaskAsync(Guid id);
         public Task<TaskEntity> AddTaskAsync(UserTaskDTO userTaskDto);
         public Task<TaskEntity> UpdateTaskAsync(TaskEntity taskEntity);
         public Task<TaskEntity> DeleteTaskAsync(TaskEntity taskEntity);

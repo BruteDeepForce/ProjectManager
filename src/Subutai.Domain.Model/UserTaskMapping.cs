@@ -12,7 +12,7 @@ namespace Subutai.Domain.Model
     {
         [Key]
         public  int Id { get; set; }
-        public  int UserId { get; set; }
+        public  Guid UserId { get; set; }
         public  int TaskId { get; set; }
     }
 }

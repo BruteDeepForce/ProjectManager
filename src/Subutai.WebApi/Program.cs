@@ -46,7 +46,7 @@ public class Program
         });
 
         builder.AddNpgsqlDbContext<AuthenticationContext>("ProjectDb");
-        builder.Services.AddIdentity<AuthEntity, AppRoleEntity>( options =>  // Add Identity to the services container
+        builder.Services.AddIdentity<UserEntity, AppRoleEntity>( options =>  // Add Identity to the services container
         {
             options.Password.RequireUppercase = false;
             options.Password.RequireLowercase = false;

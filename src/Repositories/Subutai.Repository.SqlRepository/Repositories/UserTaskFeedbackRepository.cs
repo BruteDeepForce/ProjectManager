@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Subutai.Domain.Model;
 using Subutai.Domain.Ports;
@@ -14,20 +15,24 @@ namespace Subutai.Repository.SqlRepository.Repositories
     public class UserTaskFeedbackRepository : IUserTaskFeedbackRepository
     {
         private readonly SubutaiContext _subutaiContext;
-        public UserTaskFeedbackRepository(SubutaiContext subutaiContext)
+        private readonly UserManager<UserEntity> _userManager;
+
+        public UserTaskFeedbackRepository(SubutaiContext subutaiContext, UserManager<UserEntity> userManager)
         {
          _subutaiContext = subutaiContext;   
+         _userManager = userManager;
         }
         public async Task<TaskResultDTO> CompleteTask(UserTaskDTO userTaskDTO)
         {
             var taskEntity = await _subutaiContext.Tasks.FirstOrDefaultAsync(x=>x.Id == userTaskDTO.TaskId);
-            var user =await _subutaiContext.Users.FirstOrDefaultAsync(x=>x.Id == userTaskDTO.UserId);
+            var user =await _userManager.Users.FirstOrDefaultAsync(x=>x.Id == userTaskDTO.UserId);
             if(taskEntity!=null && user != null)
             {
                 if(taskEntity.DateCompleted ==null)
                 {
                 user.CompletedProjects++;
                 user.CurrentWorkload--;
+
                 taskEntity.DateCompleted = DateTime.UtcNow;
                 taskEntity.DeletedAt = DateTime.UtcNow;
                 await _subutaiContext.SaveChangesAsync();

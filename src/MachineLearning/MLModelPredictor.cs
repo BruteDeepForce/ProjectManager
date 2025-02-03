@@ -26,39 +26,39 @@ namespace MachineLearning
 
             var strategy = subutaiContext.Database.CreateExecutionStrategy();
 
-           strategy.Execute(() =>
-         {
-             using (var transaction = subutaiContext.Database.BeginTransaction()) // Transaction başlat
-             {
-             try
-             {
-                foreach (var employee in subutaiContext.Users)
-                {
-                    var employeeInput = new EmployeeData
-                    {
-                        CompletedProjects = employee.CompletedProjects.HasValue ? employee.CompletedProjects.Value : 0,
-                        CurrentWorkload = employee.CurrentWorkload.HasValue ? employee.CurrentWorkload.Value : 0.0f
-                    };
+    //        strategy.Execute(() =>
+    //      {
+    //          using (var transaction = subutaiContext.Database.BeginTransaction()) // Transaction başlat
+    //          {
+    //          try
+    //          {
+    //             foreach (var employee in subutaiContext.Users)
+    //             {
+    //                 var employeeInput = new EmployeeData
+    //                 {
+    //                     CompletedProjects = employee.CompletedProjects.HasValue ? employee.CompletedProjects.Value : 0,
+    //                     CurrentWorkload = employee.CurrentWorkload.HasValue ? employee.CurrentWorkload.Value : 0.0f
+    //                 };
 
-                    // Performans tahminini al
-                    var prediction = predictionEngine.Predict(employeeInput);
+    //                 // Performans tahminini al
+    //                 var prediction = predictionEngine.Predict(employeeInput);
 
-                    // Tahmini veritabanına yaz
-                    employee.PerformanceRating = prediction.PerformanceRating;
-                    predict = prediction.PerformanceRating;
-                }
+    //                 // Tahmini veritabanına yaz
+    //                 employee.PerformanceRating = prediction.PerformanceRating;
+    //                 predict = prediction.PerformanceRating;
+    //             }
 
-                // Değişiklikleri kaydet ve commit yap
-                subutaiContext.SaveChanges();
-                transaction.Commit();
-              }
-              catch (Exception)
-               {
-                   transaction.Rollback(); // Hata olursa geri al
-                throw;
-               }
-        }
-    });
+    //             // Değişiklikleri kaydet ve commit yap
+    //             subutaiContext.SaveChanges();
+    //             transaction.Commit();
+    //           }
+    //           catch (Exception)
+    //            {
+    //                transaction.Rollback(); // Hata olursa geri al
+    //             throw;
+    //            }
+    //     }
+    // });
 
             Console.WriteLine("Performans değerleri veritabanına kaydedildi.");
             

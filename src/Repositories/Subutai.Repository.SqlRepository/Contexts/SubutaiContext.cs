@@ -9,7 +9,6 @@ public class SubutaiContext : DbContext, ISubutaiContext
 {
     public DbSet<ProjectEntity> Projects { get; set; } = null!;
     public DbSet<DepartmentEntity> Departments { get; set; } = null!;
-    public DbSet<UserEntity> Users{ get; set; } = null!;
     public DbSet<TaskEntity> Tasks { get; set; } 
     public DbSet<UserTaskMapping> UserTaskMappings { get; set; } = null!;
 
@@ -19,11 +18,5 @@ public class SubutaiContext : DbContext, ISubutaiContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-         modelBuilder.Entity<TaskEntity>()
-            .HasOne(t => t.User)
-            .WithMany(u => u.TaskEntity)
-            .HasForeignKey(t => t.UserNumber)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

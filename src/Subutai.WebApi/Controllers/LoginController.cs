@@ -19,10 +19,10 @@ namespace Subutai.WebApi.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        private readonly UserManager<AuthEntity> _userManager;
+        private readonly UserManager<UserEntity> _userManager;
         private readonly IAuthEntityControl _authEntityControl;
 
-        public LoginController(UserManager<AuthEntity> userManager, IAuthEntityControl authEntityControl)
+        public LoginController(UserManager<UserEntity> userManager, IAuthEntityControl authEntityControl)
         {
             _userManager = userManager;
             _authEntityControl = authEntityControl;

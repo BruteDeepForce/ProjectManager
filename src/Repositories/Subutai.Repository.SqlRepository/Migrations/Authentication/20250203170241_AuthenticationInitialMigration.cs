@@ -5,7 +5,7 @@
 namespace Subutai.Repository.SqlRepository.Migrations.Authentication
 {
     /// <inheritdoc />
-    public partial class RoleBasedMigration : Migration
+    public partial class AuthenticationInitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

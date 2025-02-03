@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Subutai.Repository.SqlRepository.Migrations.Authentication
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UpdateUserEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,8 +31,17 @@ namespace Subutai.Repository.SqlRepository.Migrations.Authentication
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: true),
+                    Password = table.Column<string>(type: "text", nullable: true),
+                    ExperienceYears = table.Column<float>(type: "real", nullable: true),
+                    CompletedProjects = table.Column<float>(type: "real", nullable: true),
+                    CurrentWorkload = table.Column<float>(type: "real", nullable: true),
+                    PerformanceRating = table.Column<float>(type: "real", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CompleteTaskTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ExpectTaskComplete = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
