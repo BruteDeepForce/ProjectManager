@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Subutai.Repository.SqlRepository.Contexts;
 using MachineLearning;
 using Subutai.Domain.Model;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -16,30 +17,30 @@ namespace Subutai.WebApi.Controllers
     public class AIMachineController : ControllerBase
     {
         private readonly SubutaiContext _subutaiContext;
+        private readonly AuthenticationContext _authenticationContext;
 
-        public AIMachineController(SubutaiContext subutaiContext)
+        public AIMachineController(SubutaiContext subutaiContext, AuthenticationContext authenticationContext)
         {
             _subutaiContext = subutaiContext;
+            _authenticationContext = authenticationContext;
         }
         [HttpGet("train")]
         public async Task<IActionResult> Train()
         {
-            ModelTraining.TrainModel(_subutaiContext);
+            ModelTraining.TrainModel(_authenticationContext);
             await _subutaiContext.SaveChangesAsync();
             return Ok();
         }
         [HttpGet("predict")]
         public async Task<IActionResult> Predict(UserEntity userEntity)
         {
-            // var user =_subutaiContext.Users.FirstOrDefault(x=>x.Id == userEntity.Id);
+            var user =_authenticationContext.Users.FirstOrDefault(x=>x.Id == userEntity.Id);
 
-            // var response = MLModelPredictor.PredictPerformance(_subutaiContext);
+            var response = MLModelPredictor.PredictPerformance(_subutaiContext, _authenticationContext);
 
-            // user!.PerformanceRating = response;
-            // await _subutaiContext.SaveChangesAsync();
+            user!.PerformanceRating = response;
+            await _subutaiContext.SaveChangesAsync();
             return Ok();
-
         }
-
     }
 }

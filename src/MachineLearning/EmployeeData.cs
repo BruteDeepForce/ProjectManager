@@ -17,6 +17,10 @@ namespace MachineLearning
         public float CurrentWorkload { get; set; }
 
         [LoadColumn(3)]
+        [ColumnName("TimeDifference")]
+        public float TimeDifference { get; set; }
+
+        [LoadColumn(4)]
         [ColumnName("Label")] // Bu satır önemli! label predict
          public float PerformanceRating { get; set; }
     }

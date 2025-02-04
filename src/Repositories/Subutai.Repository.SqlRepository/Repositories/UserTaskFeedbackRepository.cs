@@ -35,6 +35,8 @@ namespace Subutai.Repository.SqlRepository.Repositories
                 {
                 user.CompletedProjects++;
                 user.CurrentWorkload--;
+                user.CompleteTaskTime = DateTime.UtcNow;
+            
                 await _authenticationContext.SaveChangesAsync();
 
                 taskEntity.DateCompleted = DateTime.UtcNow;
