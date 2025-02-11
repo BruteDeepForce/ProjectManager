@@ -1,5 +1,5 @@
 <Project>
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(MSBuildProjectName)' != 'MauiBlazorApp'">
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -9,4 +9,5 @@
     <PropertyGroup>
         <EnforceCodeStyledInBuild>true</EnforceCodeStyledInBuild>
     </PropertyGroup>
+
 </Project>
