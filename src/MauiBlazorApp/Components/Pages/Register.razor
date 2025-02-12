@@ -1,0 +1,102 @@
+@page "/register"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="container">
+    <div class="login-box">
+        <h3 class="login-title">Register</h3>
+
+        <EditForm Model="@registerModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            
+            <!-- Hata mesajı bölümü -->
+            @if (showErrorMessage)
+            {
+                <div class="error-message">
+                    Invalid credentials. Please try again.
+                </div>
+            }
+
+            <div class="form-group">
+                <label for="E-Mail">
+                    <strong>E-Mail: </strong>
+                </label>
+                <InputText id="E-Mail" class="form-control" @bind-Value="registerModel.Email" placeholder="Enter your E-mail" style="text-align: center" />
+            </div>
+
+            <div class="form-group">
+                <label for="Username">
+                    <strong>Username:</strong>
+                </label>
+                <InputText id="Username" class="form-control" @bind-Value="registerModel.UserName" placeholder="Enter your Username" style="text-align: center" />
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <strong>Password:</strong>
+                </label>
+                <InputText type="password" id="password" class="form-control" @bind-Value="registerModel.Password" placeholder="Enter your password" style="text-align: center" />
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+                <button type="submit" class="login-button">Apply</button>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+                <button type="button" class="register-button" @onclick="NavigateToLogin">Cancel</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code 
+{
+    public bool showErrorMessage = false;
+    private RegisterModel registerModel = new RegisterModel();
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("http://10.0.2.2:5194/api/auth/register", registerModel);
+            if (response.IsSuccessStatusCode)
+            {
+                // Başarı durumunda, örneğin kullanıcıyı login sayfasına yönlendir
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                // Hatalı giriş
+               showErrorMessage = true;
+                Console.WriteLine("Invalid credentials");
+                ClearForm();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Hata durumu
+            Console.WriteLine($"Error: {ex.Message}");
+            ClearForm();
+        }
+    }
+    
+    private void ClearForm()
+    {
+        registerModel.Email = string.Empty;
+        registerModel.Password = string.Empty;
+    }
+
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/");  // Login sayfasına yönlendirme
+    }
+
+    public class RegisterModel
+    {
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}

@@ -1,0 +1,136 @@
+﻿@page "/dashboard"
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
+@using Blazored.LocalStorage
+@inject ILocalStorageService localStorage
+@using System.IdentityModel.Tokens.Jwt;
+
+<style>
+    h3 {
+        text-align: center;  /* Başlığı yatayda ortalamak için */
+    }
+</style>
+
+<h3>Dashboard</h3>
+
+@if (showAlert)
+{
+    <div class="alert alert-danger">
+        You do not have permission to access this page.
+    </div>
+}
+
+<div class="dashboard-container">
+    <div class="dashboard-box" @onclick="NavigateToDepartments">
+        <h4>Departments</h4>
+    </div>
+    <div class="dashboard-box" @onclick="NavigateToProjects">
+        <h4>Projects</h4>
+    </div>
+    <div class="dashboard-box">
+        <h4>Tasks</h4>
+    </div>
+    <div class="dashboard-box">
+        <h4>Users</h4>
+    </div>
+</div>
+
+@code {
+    private bool isAdmin = false; // Admin kontrolü
+    private bool showAlert = false; // Uyarı göstermek için
+
+    // Token alınıp admin kontrolü yapılacak
+    private async Task NavigateToDepartments()
+    {
+        // LocalStorage'dan token'ı al
+        var token = await localStorage.GetItemAsync<string>("token");
+        
+        // Eğer token yoksa, login sayfasına yönlendir
+        if (string.IsNullOrEmpty(token))
+        {
+            NavigationManager.NavigateTo("/"); 
+        }
+        else
+        {
+            // Token'ı Authorization header'ına ekle
+            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            
+            try
+            {
+                // API'den veri alarak admin kontrolü yapalım
+                var response = await HttpClient.GetAsync("api/action/getall");
+                if (response.IsSuccessStatusCode)
+                {
+                    isAdmin = true; // API'den başarılı yanıt alınırsa kullanıcı admin
+                }
+                else
+                {
+                    showAlert = true; // API'den hatalı yanıt alınırsa uyarı göster
+                }
+            }
+            catch (Exception ex)
+            {
+                showAlert = true; // Hata durumunda uyarı göster
+            }
+        }
+
+        // Eğer kullanıcı adminse, /departments sayfasına git
+        if (isAdmin)
+        {
+            NavigationManager.NavigateTo("/departments");
+        }
+        // Eğer kullanıcı admin değilse, uyarı göster
+        else
+        {
+            showAlert = true; // Admin değilse alert göster
+            StateHasChanged(); // Uyarıyı hemen güncelle
+        }
+    }
+    private async Task NavigateToProjects()
+    {
+        // LocalStorage'dan token'ı al
+        var token = await localStorage.GetItemAsync<string>("token");
+        
+        // Eğer token yoksa, login sayfasına yönlendir
+        if (string.IsNullOrEmpty(token))
+        {
+            NavigationManager.NavigateTo("/"); 
+        }
+        else
+        {
+            // Token'ı Authorization header'ına ekle
+            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            
+            try
+            {
+                // API'den veri alarak admin kontrolü yapalım
+                var response = await HttpClient.GetAsync("http://10.0.2.2:5194/api/action/getallprojects");
+                if (response.IsSuccessStatusCode)
+                {
+                    isAdmin = true; // API'den başarılı yanıt alınırsa kullanıcı admin
+                }
+                else
+                {
+                    showAlert = true; // API'den hatalı yanıt alınırsa uyarı göster
+                }
+            }
+            catch (Exception ex)
+            {
+                showAlert = true; // Hata durumunda uyarı göster
+            }
+        }
+
+        // Eğer kullanıcı adminse, /departments sayfasına git
+        if (isAdmin)
+        {
+            NavigationManager.NavigateTo("/projects");
+        }
+        // Eğer kullanıcı admin değilse, uyarı göster
+        else
+        {
+            showAlert = true; // Admin değilse alert göster
+            StateHasChanged(); // Uyarıyı hemen güncelle
+        }
+    }
+
+}

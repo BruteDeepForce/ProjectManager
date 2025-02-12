@@ -1,0 +1,50 @@
+﻿@page "/departments"
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
+
+
+<style>
+    h3 {
+        text-align: center;  /* Başlığı yatayda ortalamak için */
+    }
+</style>
+<h3>Departments</h3>
+
+@if (departments == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="departments-container">
+        @foreach (var department in departments)
+        {
+            <div class="department-box">
+                <h4>@department.Name</h4>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Department> departments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try{
+        departments = await HttpClient.GetFromJsonAsync<List<Department>>("http://10.0.2.2:5194/api/action/getall");   
+          }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private class Department
+    {
+        public string Name { get; set; }
+    }
+    
+
+}
+

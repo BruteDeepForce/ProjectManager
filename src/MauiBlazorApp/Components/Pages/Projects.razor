@@ -1,0 +1,50 @@
+﻿@page "/Projects"
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
+
+
+<style>
+    h3 {
+        text-align: center;  /* Başlığı yatayda ortalamak için */
+    }
+</style>
+<h3>Projects</h3>
+
+@if (projects == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="departments-container">
+        @foreach (var project in projects)
+        {
+            <div class="department-box">
+                <h4>@project.Name</h4>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Project> projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try{
+        projects = await HttpClient.GetFromJsonAsync<List<Project>>("http://10.0.2.2:5194/api/action/getallprojects");   
+          }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private class Project
+    {
+        public string Name { get; set; }
+    }
+    
+
+}
+

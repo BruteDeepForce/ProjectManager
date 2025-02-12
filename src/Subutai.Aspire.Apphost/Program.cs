@@ -19,7 +19,7 @@ internal class Program
 
         var webapi = builder.AddProject<Projects.Subutai_WebApi>("webapi").WithReference(projectdb);
 
-        builder.AddProject<Projects.MauiBlazorApp>("maui").WithReference(webapi);
+        //builder.AddProject<Projects.MauiBlazorApp>("maui").WithReference(webapi);
 
         // var webapi = builder.AddProject<Projects.Subutai_WebApi>("web");
 

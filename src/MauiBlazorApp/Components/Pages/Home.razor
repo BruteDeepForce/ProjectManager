@@ -1,5 +1,107 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient HttpClient
+@inject NavigationManager Navigation
+@using Blazored.LocalStorage
+@inject ILocalStorageService localStorage
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<div class="container">
+    <div class="login-box">
+        <h3 class="login-title">Login</h3>
+
+        <EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div>
+                <label for="email">Email</label>
+                <InputText id="email" @bind-Value="loginModel.Email" class="input-field" />
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <InputText type="password" id="password" @bind-Value="loginModel.Password" class="input-field" />
+            </div>
+
+            <button type="submit" class="login-button">Login</button>
+             <p class="register-text">Don't have an account? Click Register</p>
+            <button type="button" class="register-button" @onclick="NavigateToRegister">Register</button>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(loginMessage))
+        {
+            <p class="error-message">@loginMessage</p>
+        }
+    </div>
+</div>
+
+@code {  
+    private LoginModel loginModel = new LoginModel();
+    private string loginMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var response = await HttpClient.PostAsJsonAsync("api/auth/login", loginModel);
+            var errorMessages = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                loginMessage = "Login successful!";
+                var result = await response.Content.ReadAsStringAsync();
+                var token = result;
+                await localStorage.SetItemAsync("token", token);
+                HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                NavigateToDashboard();
+
+            }
+            else if(errorMessages.Contains("User is locked out"))
+            {
+                 var lockoutMessage = "User is locked out for";
+                    if (errorMessages.Contains(lockoutMessage))
+                    {
+                        var timeSubstring = errorMessages.Split(lockoutMessage)[1].Trim(); // "X minutes" kısmını alıyoruz
+                        var timeRemaining = timeSubstring.Replace("seconds", "").Trim(); // "minutes" kelimesini çıkarıyoruz
+                        loginMessage = $"User is locked out for {timeRemaining}. Please try again later.";
+                    }
+                ClearForm();
+            }
+            else if(errorMessages.Contains("Invalid email or password"))
+            {
+                loginMessage = "Invalid Email or Password. Please try again.";
+                ClearForm();
+            }
+            else
+            {
+                loginMessage = "Email and Password are required.";
+                ClearForm();
+            }
+        }
+        catch (Exception ex)
+        {
+            loginMessage = $"Error: {ex.Message}";
+        }
+        StateHasChanged();
+    }
+    private async Task NavigateToRegister()
+    {
+        Navigation.NavigateTo("/register");
+    }
+    private async Task NavigateToDashboard()
+    {
+        Navigation.NavigateTo("/dashboard");
+    }
+        private void ClearForm()
+
+    {
+        loginModel.Email = string.Empty;
+        loginModel.Password = string.Empty;
+    }
+
+    public class LoginModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}
