@@ -33,7 +33,7 @@ namespace Subutai.WebApi.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel model, CancellationToken cancellationToken)
         {
             
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            //if (!ModelState.IsValid) return BadRequest(ModelState);
             var response = await _authEntityControl.LoginAsync(model);
 
             if (response == null) return BadRequest("Invalid email or password");

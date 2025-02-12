@@ -28,8 +28,6 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
-
-
         // // PostgreSQL Local veritabanı bağlantısını yapılandırma ayarları
         //builder.Services.AddDbContext<SubutaiContext>(options =>
         //options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), x=> x.MigrationsAssembly("Subutai.Repository.SqlRepository")));   
@@ -79,6 +77,16 @@ public class Program
         });
 
         builder.Services.AddAuthorization();
+                builder.Services.AddCors(options =>
+        {
+        options.AddPolicy("AllowAll", policy =>
+         {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+         });
+        });
+
 
         builder.AddNpgsqlDbContext<SubutaiContext>("ProjectDb");
         //builder.Services.AddServiceDependencies();
@@ -90,6 +98,8 @@ public class Program
         builder.Services.AddScoped<IUserTaskFeedbackRepository, UserTaskFeedbackRepository>();
 
         var app = builder.Build();
+
+        app.UseCors("AllowAll");
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

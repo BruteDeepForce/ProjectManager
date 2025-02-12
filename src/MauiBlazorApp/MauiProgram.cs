@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Blazored.LocalStorage;
+using Microsoft.Maui.Hosting;
+
 
 namespace MauiBlazorApp;
 
@@ -13,15 +17,7 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			});
-
-#if ANDROID
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.2.2:7108/") });
-#elif IOS
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://127.0.0.1:7108/") });
-#else
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:7108/") });
-#endif
-
+		builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.2.2:5237/") });
         builder.Services.AddHttpClient();
         builder.Services.AddMauiBlazorWebView();
 

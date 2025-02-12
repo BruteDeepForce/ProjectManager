@@ -34,11 +34,13 @@ namespace Subutai.Service
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
-                return null!;
+                return "Invalid email or password"!;
             }
-            var generatedToken = await GenerateToken(loginModel.Email);
+            //var generatedToken = await GenerateToken(loginModel.Email);
 
-            return generatedToken;
+            //return generatedToken;
+
+            return "Login Success";
         }
         public async Task<UserEntity> PasswordResetAsync(ResetModel resetModel) //yapılandırılmadı
         {
